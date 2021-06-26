@@ -19,7 +19,7 @@ const Downloader = () => {
 				<FormControl placeholder="Download URL" value={downloadUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
 				<InputGroup.Append>
 					<Button>
-						<i className="bi bi-download"></i> Download to Middleman
+						<i className="bi bi-download"></i>&nbsp;Download to Middleman
 					</Button>
 				</InputGroup.Append>
 			</InputGroup>

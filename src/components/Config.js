@@ -29,7 +29,7 @@ function Context() {
 						<InputGroup>
 							<InputGroup.Prepend>
 								<InputGroup.Text>
-									<i className="bi bi-link-45deg"></i> Server URL
+									<i className="bi bi-link-45deg"></i>&nbsp;Server URL
 								</InputGroup.Text>
 							</InputGroup.Prepend>
 							<FormControl placeholder="https://middleman-server.com" name="serverUrl" value={configs.serverUrl} onChange={handleConfigChanged} aria-label="Server URL" />
@@ -38,7 +38,7 @@ function Context() {
 						<InputGroup>
 							<InputGroup.Prepend>
 								<InputGroup.Text>
-									<i className="bi bi-envelope"></i> Your Mail ID
+									<i className="bi bi-envelope"></i>&nbsp;Your Mail ID
 								</InputGroup.Text>
 							</InputGroup.Prepend>
 							<FormControl type="email" placeholder="me@gmail.com" name="userMailId" value={configs.userMailId} onChange={handleConfigChanged} aria-label="Server URL" />
