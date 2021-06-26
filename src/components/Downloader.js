@@ -11,9 +11,16 @@ const Downloader = () => {
 	return (
 		<React.Fragment>
 			<InputGroup>
+				<InputGroup.Prepend>
+					<InputGroup.Text>
+						<i class="bi bi-link-45deg"></i>
+					</InputGroup.Text>
+				</InputGroup.Prepend>
 				<FormControl placeholder="Download URL" value={downloadUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
 				<InputGroup.Append>
-					<Button>Download</Button>
+					<Button>
+						<i className="bi bi-download"></i> Download to Middleman
+					</Button>
 				</InputGroup.Append>
 			</InputGroup>
 		</React.Fragment>
