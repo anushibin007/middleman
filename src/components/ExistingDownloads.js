@@ -6,7 +6,7 @@ const ExistingDownloads = () => {
 		<Accordion defaultActiveKey="0">
 			<Card>
 				<Accordion.Toggle as={Card.Header} eventKey="0">
-					<h5>Files in the Cache</h5>
+					<h5>Files in Middleman</h5>
 				</Accordion.Toggle>
 				<Accordion.Collapse eventKey="0">
 					<Card.Body></Card.Body>
