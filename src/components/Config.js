@@ -3,7 +3,7 @@ import { Button, Modal, InputGroup, FormControl } from "react-bootstrap";
 import "../css/heart.css";
 import { ConfigContext } from "../contexts/ConfigContext";
 
-function Context() {
+function Config() {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
@@ -17,12 +17,14 @@ function Context() {
 	return (
 		<React.Fragment>
 			<Button variant="navbar-btn" onClick={handleShow}>
-				Config
+				<i className="bi bi-gear"></i>&nbsp;Config
 			</Button>
 
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>Config</Modal.Title>
+					<Modal.Title>
+						<i className="bi bi-gear"></i>&nbsp;Config
+					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<div className="d-flex flex-column">
@@ -54,4 +56,4 @@ function Context() {
 		</React.Fragment>
 	);
 }
-export default Context;
+export default Config;

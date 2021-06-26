@@ -11,18 +11,20 @@ function About() {
 	return (
 		<React.Fragment>
 			<Button variant="navbar-btn" onClick={handleShow}>
-				About Me
+				<i className="bi bi-person"></i>&nbsp;About Me
 			</Button>
 
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>About Me</Modal.Title>
+					<Modal.Title>
+						<i className="bi bi-person"></i>&nbsp;About Me
+					</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<div className="d-flex flex-column">
 						<div className="d-flex justify-content-center">
 							Designed & Developed with <span className="heart animate__animated animate__heartBeat animate__infinite px-1">♥</span> by{" "}
-							<a className="px-1" href="https://github.com/anushibin007/jira-bulk-sub-task-creator">
+							<a className="px-1" href="https://github.com/anushibin007/middleman">
 								Anu Shibin Joseph Raj
 							</a>
 						</div>
