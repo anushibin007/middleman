@@ -2,6 +2,7 @@ import "../css/navbar.css";
 import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import About from "./About";
+import Context from "./Config";
 
 function Navigation() {
 	return (
@@ -12,6 +13,7 @@ function Navigation() {
 				<Navbar.Collapse id="jsc-navbar">
 					<Nav className="mr-auto">
 						<About />
+						<Context />
 					</Nav>
 				</Navbar.Collapse>
 			</Navbar>

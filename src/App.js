@@ -6,14 +6,17 @@ import { Container } from "react-bootstrap";
 import Navigation from "./components/Navigation";
 import Downloader from "./components/Downloader";
 import ExistingDownloads from "./components/ExistingDownloads";
+import { ConfigProvider } from "./contexts/ConfigContext";
 
 function App() {
 	return (
 		<Container>
-			<Navigation />
-			<Downloader />
-			<br />
-			<ExistingDownloads />
+			<ConfigProvider>
+				<Navigation />
+				<Downloader />
+				<br />
+				<ExistingDownloads />
+			</ConfigProvider>
 		</Container>
 	);
 }
