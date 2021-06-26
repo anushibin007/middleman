@@ -13,7 +13,7 @@ const Downloader = () => {
 			<InputGroup>
 				<InputGroup.Prepend>
 					<InputGroup.Text>
-						<i class="bi bi-link-45deg"></i>
+						<i className="bi bi-link-45deg"></i>
 					</InputGroup.Text>
 				</InputGroup.Prepend>
 				<FormControl placeholder="Download URL" value={downloadUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />

@@ -10,9 +10,8 @@ function Context() {
 
 	const [configs, setConfigs] = useContext(ConfigContext);
 
-	const handleServerUrlChanged = (e) => {
-		const aServerUrl = e.target.value;
-		setConfigs({ serverUrl: aServerUrl });
+	const handleConfigChanged = (e) => {
+		setConfigs({ ...configs, [e.target.name]: e.target.value });
 	};
 
 	return (
@@ -30,10 +29,19 @@ function Context() {
 						<InputGroup>
 							<InputGroup.Prepend>
 								<InputGroup.Text>
-									<i class="bi bi-link-45deg"></i> Server URL
+									<i className="bi bi-link-45deg"></i> Server URL
 								</InputGroup.Text>
 							</InputGroup.Prepend>
-							<FormControl placeholder="https://middleman-server.com" value={configs.serverUrl} onChange={handleServerUrlChanged} aria-label="Server URL" />
+							<FormControl placeholder="https://middleman-server.com" name="serverUrl" value={configs.serverUrl} onChange={handleConfigChanged} aria-label="Server URL" />
+						</InputGroup>
+						<br />
+						<InputGroup>
+							<InputGroup.Prepend>
+								<InputGroup.Text>
+									<i className="bi bi-envelope"></i> Your Mail ID
+								</InputGroup.Text>
+							</InputGroup.Prepend>
+							<FormControl type="email" placeholder="me@gmail.com" name="userMailId" value={configs.userMailId} onChange={handleConfigChanged} aria-label="Server URL" />
 						</InputGroup>
 					</div>
 				</Modal.Body>
