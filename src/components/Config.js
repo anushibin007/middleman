@@ -49,7 +49,7 @@ function Config() {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="info" onClick={handleClose}>
-						Save
+						<i className="bi bi-save"></i>&nbsp;Save
 					</Button>
 				</Modal.Footer>
 			</Modal>
