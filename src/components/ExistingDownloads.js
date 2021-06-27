@@ -11,7 +11,11 @@ const ExistingDownloads = () => {
 	const validateExistingDownloads = () => {
 		if (existingDownloads.length !== 0) {
 			console.log(existingDownloads[0].id);
-			return existingDownloads.map((aDownload) => <p key={aDownload.id}>{aDownload.downloadUrl}</p>);
+			return existingDownloads.map((aDownload) => (
+				<p key={aDownload.id}>
+					{aDownload.downloadUrl} | {aDownload.status}
+				</p>
+			));
 		} else {
 			return <p>none</p>;
 		}
