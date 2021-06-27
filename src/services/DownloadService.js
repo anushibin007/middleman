@@ -1,8 +1,11 @@
 import axios from "axios";
-import React, { useContext } from "react";
 class DownloadService {
 	downloadFile(serverUrl, downloadUrl) {
 		return axios.get(serverUrl + "/download?downloadUrl=" + downloadUrl);
+	}
+
+	getExistingDownloads(serverUrl) {
+		if (serverUrl !== "") return axios.get(serverUrl + "/api/middlemanDocs?size=100");
 	}
 }
 
