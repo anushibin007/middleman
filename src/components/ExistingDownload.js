@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { toast } from "react-toastify";
+import DownloadService from "../services/DownloadService";
 
 const ExistingDownload = (props) => {
 	const [configs] = useContext(ConfigContext);
@@ -28,8 +29,7 @@ const ExistingDownload = (props) => {
 	};
 
 	const deleteFileFromMiddleman = () => {
-		// DownloadService.deleteFile(configs.serverUrl, existingDownload.id);
-		toast("🚀 Still under Development. Stay Tuned!");
+		DownloadService.deleteFile(configs.serverUrl, existingDownload.id);
 	};
 
 	const getExistingDownloadUrl = () => {

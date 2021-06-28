@@ -13,8 +13,10 @@ class DownloadService {
 	}
 
 	deleteFile(serverUrl, fileId) {
-		if (serverUrl !== "") return axios.delete(serverUrl + "/api/middlemanDocs/" + fileId);
-		else this.showErrorMessage();
+		if (serverUrl !== "") {
+			toast.warning("🧯 File deleted from middleman cache");
+			return axios.get(serverUrl + "/delete?id=" + fileId);
+		} else this.showErrorMessage();
 	}
 
 	showErrorMessage() {
