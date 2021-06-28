@@ -7,21 +7,19 @@ import Navigation from "./components/Navigation";
 import Downloader from "./components/Downloader";
 import ExistingDownloads from "./components/ExistingDownloads";
 import { ConfigProvider } from "./contexts/ConfigContext";
-import { ToastConfigProvider } from "./contexts/ToastContext";
-import CustomToast from "./components/CustomToast";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
 	return (
 		<Container>
 			<ConfigProvider>
-				<ToastConfigProvider>
-					<Navigation />
-					<Downloader />
-					<hr />
-					<ExistingDownloads />
-					<CustomToast />
-				</ToastConfigProvider>
+				<Navigation />
+				<Downloader />
+				<hr />
+				<ExistingDownloads />
 			</ConfigProvider>
+			<ToastContainer position="bottom-right" />
 		</Container>
 	);
 }

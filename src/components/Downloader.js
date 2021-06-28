@@ -4,12 +4,11 @@ import DownloadService from "../services/DownloadService";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { loadProgressBar } from "axios-progress-bar";
 import "axios-progress-bar/dist/nprogress.css";
-import { ToastContext } from "../contexts/ToastContext";
+import { toast } from "react-toastify";
 
 const Downloader = () => {
 	const [downloadUrl, setDownloadUrl] = useState("");
 	const [configs] = useContext(ConfigContext);
-	const [toastConfig, setToastConfig] = useContext(ToastContext);
 
 	const handleDownloadUrlChanged = (e) => {
 		setDownloadUrl(e.target.value);
@@ -25,10 +24,10 @@ const Downloader = () => {
 				})
 				.catch((err) => {
 					//if download failed
-					setToastConfig({ ...toastConfig, show: true, message: "Sorry, an error occured: " + err, type: "danger" });
+					toast.error("Sorry, an error occured: " + err);
 				});
 		} else {
-			setToastConfig({ ...toastConfig, show: true, message: "Download URL cannot be empty", type: "danger" });
+			toast.error("Download URL cannot be empty");
 		}
 	};
 
