@@ -25,7 +25,7 @@ const Downloader = () => {
 				})
 				.catch((err) => {
 					//if download failed
-					alert("Sorry, an error occured: " + err);
+					setToastConfig({ ...toastConfig, show: true, message: "Sorry, an error occured: " + err, type: "danger" });
 				});
 		} else {
 			setToastConfig({ ...toastConfig, show: true, message: "Download URL cannot be empty", type: "danger" });
