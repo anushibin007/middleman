@@ -15,19 +15,23 @@ const Downloader = () => {
 	};
 
 	const handleDownloadClicked = () => {
-		if (downloadUrl !== "") {
-			loadProgressBar();
-			DownloadService.downloadFile(configs.serverUrl, downloadUrl)
-				.then(() => {
-					//if download was successful
-					setDownloadUrl("");
-				})
-				.catch((err) => {
-					//if download failed
-					toast.error("Sorry, an error occured: " + err);
-				});
+		if (configs.serverUrl) {
+			if (downloadUrl) {
+				loadProgressBar();
+				DownloadService.downloadFile(configs.serverUrl, downloadUrl)
+					.then(() => {
+						//if download was successful
+						setDownloadUrl("");
+					})
+					.catch((err) => {
+						//if download failed
+						toast.error("Sorry, an error occured: " + err);
+					});
+			} else {
+				toast.error("Download URL cannot be empty");
+			}
 		} else {
-			toast.error("Download URL cannot be empty");
+			DownloadService.showErrorMessage();
 		}
 	};
 

@@ -3,6 +3,7 @@ import { Accordion, Row, Col, Button, Table } from "react-bootstrap";
 import { ConfigContext } from "../contexts/ConfigContext";
 import DownloadService from "../services/DownloadService";
 import ExistingDownload from "./ExistingDownload";
+import { toast } from "react-toastify";
 
 const ExistingDownloads = () => {
 	/**
@@ -20,9 +21,13 @@ const ExistingDownloads = () => {
 	 */
 	const fetchExisting = () => {
 		if (configs.serverUrl) {
-			DownloadService.getExistingDownloads(configs.serverUrl).then((response) => {
-				setExistingDownloads(response.data._embedded.middlemanDocs);
-			});
+			DownloadService.getExistingDownloads(configs.serverUrl)
+				.then((response) => {
+					setExistingDownloads(response.data._embedded.middlemanDocs);
+				})
+				.catch((err) => {
+					toast.error("Sorry, an error occured: " + err);
+				});
 		}
 	};
 
