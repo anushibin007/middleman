@@ -7,7 +7,7 @@ import "axios-progress-bar/dist/nprogress.css";
 
 const Downloader = () => {
 	const [downloadUrl, setDownloadUrl] = useState("");
-	const [configs, setConfigs] = useContext(ConfigContext);
+	const [configs] = useContext(ConfigContext);
 
 	const handleDownloadUrlChanged = (e) => {
 		setDownloadUrl(e.target.value);
