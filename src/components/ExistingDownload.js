@@ -8,16 +8,29 @@ const ExistingDownload = (props) => {
 		setExistingDownload(props.item);
 	}, [props.item]);
 
+	const getRowColorClassName = () => {
+		if (existingDownload.status === "done") return "table-success";
+		if (existingDownload.status === "in progress") return "table-warning";
+		if (existingDownload.status === "error") return "table-danger";
+	};
+
+	const getDownloadButtonDisabledStatus = () => {
+		if (existingDownload.status === "done") return false;
+		return true;
+	};
+
+	const downloadFileFromMiddleman = () => {
+		window.open(existingDownload.middlemanUrl);
+	};
+
 	return (
-		<tr>
+		<tr className={getRowColorClassName()}>
 			<td>{existingDownload.downloadUrl}</td>
 			<td>{existingDownload.status}</td>
 			<td>
-				<a href={existingDownload.middlemanUrl}>
-					<Button variant="success">
-						<i className="bi bi-download"></i>&nbsp;Download
-					</Button>
-				</a>
+				<Button variant="success" disabled={getDownloadButtonDisabledStatus()} onClick={downloadFileFromMiddleman}>
+					<i className="bi bi-download"></i>&nbsp;Download
+				</Button>
 			</td>
 		</tr>
 	);
