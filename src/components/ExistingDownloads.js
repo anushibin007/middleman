@@ -35,7 +35,7 @@ const ExistingDownloads = () => {
 				</Col>
 				<Col>
 					<Button variant="warning" onClick={fetchExisting} className="float-end">
-						<i className="bi bi-x-octagon"></i> Fetch
+						<i className="bi bi-arrow-repeat"></i> Fetch
 					</Button>
 				</Col>
 			</Row>
