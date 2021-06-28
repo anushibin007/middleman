@@ -2,18 +2,28 @@ import React, { useState, useContext } from "react";
 import { InputGroup, FormControl, Button } from "react-bootstrap";
 import DownloadService from "../services/DownloadService";
 import { ConfigContext } from "../contexts/ConfigContext";
+import { loadProgressBar } from "axios-progress-bar";
+import "axios-progress-bar/dist/nprogress.css";
 
 const Downloader = () => {
 	const [downloadUrl, setDownloadUrl] = useState("");
-	const [configs] = useContext(ConfigContext);
+	const [configs, setConfigs] = useContext(ConfigContext);
 
 	const handleDownloadUrlChanged = (e) => {
 		setDownloadUrl(e.target.value);
 	};
 
 	const handleDownloadClicked = () => {
-		DownloadService.downloadFile(configs.serverUrl, downloadUrl);
-		setDownloadUrl("");
+		loadProgressBar();
+		DownloadService.downloadFile(configs.serverUrl, downloadUrl)
+			.then(() => {
+				//if download was successful
+				setDownloadUrl("");
+			})
+			.catch((err) => {
+				//if download failed
+				alert("Sorry, an error occured: " + err);
+			});
 	};
 
 	return (
