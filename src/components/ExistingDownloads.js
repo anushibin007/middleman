@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { Accordion, Card, Row, Col, Button, Table } from "react-bootstrap";
+import { Accordion, Row, Col, Button, Table } from "react-bootstrap";
 import { ConfigContext } from "../contexts/ConfigContext";
 import DownloadService from "../services/DownloadService";
 import ExistingDownload from "./ExistingDownload";

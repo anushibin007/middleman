@@ -6,7 +6,7 @@ const ExistingDownload = (props) => {
 
 	useEffect(() => {
 		setExistingDownload(props.item);
-	}, [existingDownload]);
+	}, [props.item]);
 
 	return (
 		<tr>
