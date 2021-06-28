@@ -14,7 +14,7 @@ function App() {
 			<ConfigProvider>
 				<Navigation />
 				<Downloader />
-				<br />
+				<hr />
 				<ExistingDownloads />
 			</ConfigProvider>
 		</Container>

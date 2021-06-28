@@ -18,6 +18,7 @@ const Downloader = () => {
 
 	return (
 		<React.Fragment>
+			<h5>Cache files to Middleman</h5>
 			<InputGroup>
 				<InputGroup.Prepend>
 					<InputGroup.Text>
@@ -27,7 +28,7 @@ const Downloader = () => {
 				<FormControl placeholder="Download URL" value={downloadUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
 				<InputGroup.Append>
 					<Button onClick={handleDownloadClicked}>
-						<i className="bi bi-download"></i>&nbsp;Download to Middleman
+						<i className="bi bi-download"></i>&nbsp;Cache to Middleman
 					</Button>
 				</InputGroup.Append>
 			</InputGroup>
