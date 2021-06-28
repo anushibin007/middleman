@@ -64,7 +64,7 @@ const ExistingDownloads = () => {
 				</Col>
 			</Row>
 			<Row>
-				<Table striped bordered hover>
+				<Table striped bordered hover responsive>
 					<thead>
 						<tr>
 							<th>Original Download URL</th>
