@@ -4,10 +4,12 @@ import DownloadService from "../services/DownloadService";
 import { ConfigContext } from "../contexts/ConfigContext";
 import { loadProgressBar } from "axios-progress-bar";
 import "axios-progress-bar/dist/nprogress.css";
+import { ToastContext } from "../contexts/ToastContext";
 
 const Downloader = () => {
 	const [downloadUrl, setDownloadUrl] = useState("");
 	const [configs] = useContext(ConfigContext);
+	const [toastConfig, setToastConfig] = useContext(ToastContext);
 
 	const handleDownloadUrlChanged = (e) => {
 		setDownloadUrl(e.target.value);
@@ -26,7 +28,7 @@ const Downloader = () => {
 					alert("Sorry, an error occured: " + err);
 				});
 		} else {
-			alert("Please enter a download URL");
+			setToastConfig({ ...toastConfig, show: true, message: "Download URL cannot be empty", type: "danger" });
 		}
 	};
 

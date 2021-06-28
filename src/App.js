@@ -7,15 +7,20 @@ import Navigation from "./components/Navigation";
 import Downloader from "./components/Downloader";
 import ExistingDownloads from "./components/ExistingDownloads";
 import { ConfigProvider } from "./contexts/ConfigContext";
+import { ToastConfigProvider } from "./contexts/ToastContext";
+import CustomToast from "./components/CustomToast";
 
 function App() {
 	return (
 		<Container>
 			<ConfigProvider>
-				<Navigation />
-				<Downloader />
-				<hr />
-				<ExistingDownloads />
+				<ToastConfigProvider>
+					<Navigation />
+					<Downloader />
+					<hr />
+					<ExistingDownloads />
+					<CustomToast />
+				</ToastConfigProvider>
 			</ConfigProvider>
 		</Container>
 	);
