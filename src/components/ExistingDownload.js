@@ -1,7 +1,11 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button } from "react-bootstrap";
+import { ConfigContext } from "../contexts/ConfigContext";
+import DownloadService from "../services/DownloadService";
 
 const ExistingDownload = (props) => {
+	const [configs] = useContext(ConfigContext);
+
 	const [existingDownload, setExistingDownload] = useState([]);
 
 	useEffect(() => {
@@ -14,13 +18,17 @@ const ExistingDownload = (props) => {
 		if (existingDownload.status === "error") return "table-danger";
 	};
 
-	const getDownloadButtonDisabledStatus = () => {
+	const getButtonsDisabledStatus = () => {
 		if (existingDownload.status === "done") return false;
 		return true;
 	};
 
 	const downloadFileFromMiddleman = () => {
 		window.open(existingDownload.middlemanUrl);
+	};
+
+	const deleteFileFromMiddleman = () => {
+		DownloadService.deleteFile(configs.serverUrl, existingDownload.id);
 	};
 
 	return (
@@ -30,8 +38,13 @@ const ExistingDownload = (props) => {
 			</td>
 			<td>{existingDownload.status}</td>
 			<td>
-				<Button variant="success" disabled={getDownloadButtonDisabledStatus()} onClick={downloadFileFromMiddleman}>
+				<Button variant="success" disabled={getButtonsDisabledStatus()} onClick={downloadFileFromMiddleman}>
 					<i className="bi bi-download"></i>&nbsp;Download
+				</Button>
+			</td>
+			<td>
+				<Button variant="danger" disabled={getButtonsDisabledStatus()} onClick={deleteFileFromMiddleman}>
+					<i className="bi bi-trash"></i>&nbsp;Delete
 				</Button>
 			</td>
 		</tr>

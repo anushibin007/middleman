@@ -40,7 +40,7 @@ const ExistingDownloads = () => {
 		} else {
 			return (
 				<tr>
-					<td colSpan={3}>No results found. Try fetching again.</td>
+					<td colSpan={4}>No results found. Try fetching again.</td>
 				</tr>
 			);
 		}
@@ -65,6 +65,7 @@ const ExistingDownloads = () => {
 							<th>Original Download URL</th>
 							<th>Status</th>
 							<th>Download from Middleman</th>
+							<th>Delete from Middleman</th>
 						</tr>
 					</thead>
 					<tbody>{validateExistingDownloads()}</tbody>
