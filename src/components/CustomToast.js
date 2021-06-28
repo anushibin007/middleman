@@ -6,12 +6,14 @@ const CustomToast = () => {
 	const [toastConfig, setToastConfig] = useContext(ToastContext);
 
 	return (
-		<Toast onClose={() => setToastConfig({ ...toastConfig, show: false })} show={toastConfig.show} delay={3000} autohide>
-			<Alert color="default" variant={toastConfig.type}>
-				<Alert.Heading>Hey!</Alert.Heading>
-				<p>{toastConfig.message}</p>
-			</Alert>
-		</Toast>
+		<div style={{ position: "fixed", bottom: 10, right: 10 }}>
+			<Toast onClose={() => setToastConfig({ ...toastConfig, show: false })} show={toastConfig.show} delay={3000} autohide>
+				<Alert color="default" variant={toastConfig.type}>
+					<Alert.Heading>Hey!</Alert.Heading>
+					<p>{toastConfig.message}</p>
+				</Alert>
+			</Toast>
+		</div>
 	);
 };
 
