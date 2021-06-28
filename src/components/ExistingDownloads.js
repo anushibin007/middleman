@@ -11,7 +11,7 @@ const ExistingDownloads = () => {
 
 	const validateExistingDownloads = () => {
 		if (existingDownloads.length !== 0) {
-			return existingDownloads.map((aDownload) => <ExistingDownload item={aDownload} />);
+			return existingDownloads.map((aDownload) => <ExistingDownload item={aDownload} key={aDownload.id} />);
 		} else {
 			return (
 				<tr>
@@ -23,7 +23,6 @@ const ExistingDownloads = () => {
 
 	const fetchExisting = () => {
 		DownloadService.getExistingDownloads(configs.serverUrl).then((response) => {
-			console.log(response.data);
 			setExistingDownloads(response.data._embedded.middlemanDocs);
 		});
 	};
