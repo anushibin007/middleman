@@ -12,6 +12,9 @@ export const ConfigProvider = (props) => {
 		const stateFromLocalStorage = localStorage.getItem(Constants.LOCALSTORAGE_SERVER_URL_KEY);
 		if (stateFromLocalStorage) {
 			setConfigs(JSON.parse(stateFromLocalStorage));
+		} else {
+			// set a default server value
+			setConfigs({ serverUrl: "https://middleman-backend-server.herokuapp.com" });
 		}
 	}, []);
 

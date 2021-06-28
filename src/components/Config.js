@@ -68,7 +68,7 @@ function Config() {
 									<i className="bi bi-link-45deg"></i>&nbsp;Server URL
 								</InputGroup.Text>
 							</InputGroup.Prepend>
-							<FormControl placeholder="https://middleman-server.com" name="serverUrl" value={localConfigHolder.serverUrl} onChange={handleConfigChanged} aria-label="Server URL" />
+							<FormControl placeholder="https://middleman-backend-server.herokuapp.com" name="serverUrl" value={localConfigHolder.serverUrl} onChange={handleConfigChanged} aria-label="Server URL" />
 						</InputGroup>
 						<br />
 						<InputGroup>
