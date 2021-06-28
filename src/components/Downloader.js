@@ -25,10 +25,10 @@ const Downloader = () => {
 					})
 					.catch((err) => {
 						//if download failed
-						toast.error("Sorry, an error occured: " + err);
+						toast.error("😢 Sorry, an error occured: " + err);
 					});
 			} else {
-				toast.error("Download URL cannot be empty");
+				toast.error("💔 Download URL cannot be empty");
 			}
 		} else {
 			DownloadService.showErrorMessage();

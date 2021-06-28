@@ -26,7 +26,7 @@ const ExistingDownloads = () => {
 					setExistingDownloads(response.data._embedded.middlemanDocs);
 				})
 				.catch((err) => {
-					toast.error("Sorry, an error occured: " + err);
+					toast.error("😢 Sorry, an error occured: " + err);
 				});
 		}
 	};

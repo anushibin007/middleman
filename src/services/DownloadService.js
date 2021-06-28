@@ -18,7 +18,7 @@ class DownloadService {
 	}
 
 	showErrorMessage() {
-		toast.error('The "Server URL" cannot be empty. Please specify one in the Config');
+		toast.error('💔 The "Server URL" cannot be empty. Please specify one in the Config');
 	}
 }
 
