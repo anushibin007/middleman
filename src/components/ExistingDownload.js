@@ -25,7 +25,9 @@ const ExistingDownload = (props) => {
 
 	return (
 		<tr className={getRowColorClassName()}>
-			<td>{existingDownload.downloadUrl}</td>
+			<td>
+				<a href={existingDownload.downloadUrl}>{existingDownload.downloadUrl}</a>
+			</td>
 			<td>{existingDownload.status}</td>
 			<td>
 				<Button variant="success" disabled={getDownloadButtonDisabledStatus()} onClick={downloadFileFromMiddleman}>
