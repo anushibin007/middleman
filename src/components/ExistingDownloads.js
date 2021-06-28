@@ -59,7 +59,7 @@ const ExistingDownloads = () => {
 				</Col>
 				<Col>
 					<Button variant="warning" onClick={fetchExisting} className="float-end">
-						<i className="bi bi-arrow-repeat"></i> Fetch
+						<i className="bi bi-arrow-repeat"></i> Refresh
 					</Button>
 				</Col>
 			</Row>

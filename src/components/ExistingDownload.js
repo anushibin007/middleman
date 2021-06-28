@@ -19,7 +19,7 @@ const ExistingDownload = (props) => {
 	};
 
 	const getButtonsDisabledStatus = () => {
-		if (existingDownload.status === "done") return false;
+		if (existingDownload.status === "done" || existingDownload.status === "error") return false;
 		return true;
 	};
 
@@ -32,17 +32,39 @@ const ExistingDownload = (props) => {
 		toast("🚀 Still under Development. Stay Tuned!");
 	};
 
-	return (
-		<tr className={getRowColorClassName()}>
-			<td>
-				<a href={existingDownload.downloadUrl}>{existingDownload.downloadUrl}</a>
-			</td>
-			<td>{existingDownload.status}</td>
-			<td>
+	const getExistingDownloadUrl = () => {
+		if (existingDownload.status === "error") {
+			return existingDownload.downloadUrl;
+		} else {
+			return <a href={existingDownload.downloadUrl}>{existingDownload.downloadUrl}</a>;
+		}
+	};
+
+	const retryDownload = () => {
+		toast("🚀 Still under Development. Stay Tuned!");
+	};
+
+	const getDownloadOrRetryButton = () => {
+		if (existingDownload.status === "error") {
+			return (
+				<Button variant="warning" disabled={getButtonsDisabledStatus()} onClick={retryDownload}>
+					<i className="bi bi-download"></i>&nbsp;Retry
+				</Button>
+			);
+		} else {
+			return (
 				<Button variant="success" disabled={getButtonsDisabledStatus()} onClick={downloadFileFromMiddleman}>
 					<i className="bi bi-download"></i>&nbsp;Download
 				</Button>
-			</td>
+			);
+		}
+	};
+
+	return (
+		<tr className={getRowColorClassName()}>
+			<td>{getExistingDownloadUrl()}</td>
+			<td>{existingDownload.status}</td>
+			<td>{getDownloadOrRetryButton()}</td>
 			<td>
 				<Button variant="danger" disabled={getButtonsDisabledStatus()} onClick={deleteFileFromMiddleman}>
 					<i className="bi bi-trash"></i>&nbsp;Delete

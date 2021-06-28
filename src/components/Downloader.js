@@ -18,10 +18,11 @@ const Downloader = () => {
 		if (configs.serverUrl) {
 			if (downloadUrl) {
 				loadProgressBar();
+				setDownloadUrl("");
+				toast.success("✅ Download queued. Refresh to see the progress");
 				DownloadService.downloadFile(configs.serverUrl, downloadUrl)
 					.then(() => {
 						//if download was successful
-						setDownloadUrl("");
 					})
 					.catch((err) => {
 						//if download failed
