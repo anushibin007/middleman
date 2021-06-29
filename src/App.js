@@ -28,6 +28,7 @@ function App() {
 		<Container>
 			<ConfigProvider>
 				<Navigation />
+				<br />
 				<Downloader />
 				<hr />
 				<ExistingDownloads />
