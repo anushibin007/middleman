@@ -56,7 +56,7 @@ exports.upload = functions.https.onRequest((request, response) => {
 
 const checkIfFileExists = (fileName) => {
 	const fileNameHash = getHash(fileName);
-	return new Promise((resolve) => {
+	return new Promise((resolve, reject) => {
 		db.ref(DB_NAME)
 			.child(fileNameHash)
 			.get()
