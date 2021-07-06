@@ -9,6 +9,8 @@ exports.upload = functions.https.onRequest((request, response) => {
 			functions.logger.info("Hello logs!", { structuredData: true });
 			console.log(request.hostname);
 			response.send("Upload Triggered! by " + request.hostname);
+		} else {
+			response.status(403).json({ error: "Access Forbidden" });
 		}
 	});
 });
