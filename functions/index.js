@@ -12,7 +12,7 @@ exports.upload = functions.https.onRequest((request, response) => {
 		if (serverAllowed(request.hostname)) {
 			const fileUrl = request.query.fileUrl;
 			if (fileUrl) {
-				const target = os.tmpdir() + path.basename(fileUrl);
+				const target = os.tmpdir() + "/" + path.basename(fileUrl);
 				functions.logger.info("Executing upload function", { "request.hostname": request.hostname });
 				// wget the file locally
 				wgetTheFile(fileUrl, target)
