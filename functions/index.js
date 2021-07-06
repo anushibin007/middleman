@@ -5,7 +5,7 @@ const cors = require("cors")({ origin: true });
 
 exports.upload = functions.https.onRequest((request, response) => {
 	cors(request, response, () => {
-		if (constants.allowedServers.includes(request.hostname)) {
+		if (serverAllowed(request.hostname)) {
 			functions.logger.info("Executing upload function", { "request.hostname": request.hostname });
 			response.send("Upload Triggered! by " + request.hostname);
 		} else {
@@ -14,3 +14,7 @@ exports.upload = functions.https.onRequest((request, response) => {
 		}
 	});
 });
+
+const serverAllowed = (serverHostName) => {
+	return constants.allowedServers.includes(serverHostName);
+};
