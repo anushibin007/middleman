@@ -62,7 +62,7 @@ const wgetTheFile = (fileUrl, target) => {
 const uploadFileToStorage = (target, fileName) => {
 	return new Promise(async (resolve, reject) => {
 		try {
-			const bucket = admin.storage().bucket("middleman-bucket");
+			const bucket = admin.storage().bucket();
 			await bucket.upload(target, { destination: fileName });
 			const successMessage = { success: "File '" + fileName + "' written to Storage" };
 			console.log(successMessage);
