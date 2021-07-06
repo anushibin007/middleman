@@ -51,15 +51,15 @@ const wgetTheFile = (fileUrl, target) => {
 	let download = wget.download(fileUrl, target);
 	return new Promise((resolve, reject) => {
 		download.on("end", (output) => {
-			console.log({ output });
+			functions.logger.info({ output });
 			resolve({ success: output });
 		});
 		download.on("error", (err) => {
-			console.log({ err });
+			functions.logger.error({ err });
 			reject({ error: "Could not download file due to : " + err });
 		});
 		download.on("start", (fileSize) => {
-			console.log({ fileSize });
+			functions.logger.info({ fileSize });
 		});
 	});
 };
@@ -70,28 +70,31 @@ const uploadFileToStorage = (target, fileName) => {
 			const bucket = admin.storage().bucket();
 			await bucket.upload(target, { destination: fileName });
 			const successMessage = { success: "File '" + fileName + "' written to Storage" };
-			console.log(successMessage);
+			functions.logger.info(successMessage);
 			resolve(successMessage);
 		} catch (err) {
+			functions.logger.error({ err });
 			reject({ err: err });
 		}
 	});
 };
 
 const addEntryToDB = (fileUrl, fileName) => {
+	const fileNameHash = Buffer.from(fileName).toString("base64");
+	const dataToWriteToDb = {
+		fileName: fileName,
+		fileUrl: fileUrl,
+		createdAt: new Date().getTime(),
+	};
 	return new Promise(async (resolve, reject) => {
-		const fileNameHash = Buffer.from(fileName).toString("base64");
-		const dataToWriteToDb = {
-			fileName: fileName,
-			fileUrl: fileUrl,
-			createdAt: new Date().getTime(),
-		};
 		db.ref("files/" + fileNameHash)
 			.set(dataToWriteToDb)
 			.then(() => {
+				functions.logger.info(dataToWriteToDb);
 				resolve(dataToWriteToDb);
 			})
 			.catch((err) => {
+				functions.logger.error({ err: err });
 				reject({ err: err });
 			});
 	});
