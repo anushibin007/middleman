@@ -22,3 +22,6 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 functions/firebase-debug.log
+functions/.runtimeconfig.json
+functions/database-debug.log
+functions/ui-debug.log
