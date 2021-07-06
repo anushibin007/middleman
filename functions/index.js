@@ -4,11 +4,11 @@ admin.initializeApp(functions.config().firebase);
 const constants = require("./constants");
 const path = require("path");
 const os = require("os");
-const fs = require("fs");
 const wget = require("wget-improved");
 
 const cors = require("cors")({ origin: true });
 const db = admin.database();
+const DB_NAME = "files";
 
 exports.upload = functions.https.onRequest((request, response) => {
 	cors(request, response, async () => {
@@ -18,23 +18,30 @@ exports.upload = functions.https.onRequest((request, response) => {
 			if (fileUrl) {
 				const fileName = path.basename(fileUrl);
 				const target = os.tmpdir() + "/" + path.basename(fileName);
-				// wget the file locally
-				await wgetTheFile(fileUrl, target)
-					//.then((resolve) => response.json(resolve))
-					.catch((reject) => {
-						response.status(500).json(reject);
-					});
-				// upload the file to Storage
-				await uploadFileToStorage(target, fileName)
-					//.then((resolve) => response.json(resolve))
-					.catch((reject) => {
-						response.status(500).json(reject);
-					});
-				// Add an entry to DB
-				await addEntryToDB(fileUrl, fileName)
+				// Check if the file already exists
+				await checkIfFileExists(fileName)
 					.then((resolve) => response.json(resolve))
-					.catch((reject) => {
-						response.status(500).json(reject);
+					.catch(async () => {
+						// File is not present in the DB. Fetch it
+
+						// wget the file locally
+						await wgetTheFile(fileUrl, target)
+							//.then((resolve) => response.json(resolve))
+							.catch((reject) => {
+								response.status(500).json(reject);
+							});
+						// upload the file to Storage
+						await uploadFileToStorage(target, fileName)
+							//.then((resolve) => response.json(resolve))
+							.catch((reject) => {
+								response.status(500).json(reject);
+							});
+						// Add an entry to DB
+						await addEntryToDB(fileUrl, fileName)
+							.then((resolve) => response.json(resolve))
+							.catch((reject) => {
+								response.status(500).json(reject);
+							});
 					});
 			} else {
 				functions.logger.error("fileUrl missing");
@@ -46,6 +53,27 @@ exports.upload = functions.https.onRequest((request, response) => {
 		}
 	});
 });
+
+const checkIfFileExists = (fileName) => {
+	const fileNameHash = getHash(fileName);
+	return new Promise((resolve) => {
+		db.ref(DB_NAME)
+			.child(fileNameHash)
+			.get()
+			.then((doc) => {
+				if (doc.exists()) {
+					const documentValue = doc.val();
+					functions.logger.info("File '" + fileName + "' already exists in storage", documentValue);
+					resolve(documentValue);
+				} else {
+					reject("File '" + fileName + "' does not exist in storage");
+				}
+			})
+			.catch((err) => {
+				reject({ err: err });
+			});
+	});
+};
 
 const wgetTheFile = (fileUrl, target) => {
 	let download = wget.download(fileUrl, target);
@@ -80,14 +108,14 @@ const uploadFileToStorage = (target, fileName) => {
 };
 
 const addEntryToDB = (fileUrl, fileName) => {
-	const fileNameHash = Buffer.from(fileName).toString("base64");
+	const fileNameHash = getHash(fileName);
 	const dataToWriteToDb = {
 		fileName: fileName,
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
 	};
 	return new Promise(async (resolve, reject) => {
-		db.ref("files/" + fileNameHash)
+		db.ref(DB_NAME + "/" + fileNameHash)
 			.set(dataToWriteToDb)
 			.then(() => {
 				functions.logger.info(dataToWriteToDb);
@@ -102,4 +130,8 @@ const addEntryToDB = (fileUrl, fileName) => {
 
 const serverAllowed = (serverHostName) => {
 	return constants.allowedServers.includes(serverHostName);
+};
+
+const getHash = (input) => {
+	return Buffer.from(input).toString("base64");
 };
