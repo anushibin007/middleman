@@ -9,13 +9,14 @@ const cors = require("cors")({ origin: true });
 
 exports.upload = functions.https.onRequest((request, response) => {
 	cors(request, response, async () => {
+		functions.logger.info("Executing upload function", { "request.hostname": request.hostname });
 		if (serverAllowed(request.hostname)) {
 			const fileUrl = request.query.fileUrl;
 			if (fileUrl) {
-				const target = os.tmpdir() + "/" + path.basename(fileUrl);
-				functions.logger.info("Executing upload function", { "request.hostname": request.hostname });
+				const fileName = path.basename(fileUrl);
+				const target = os.tmpdir() + "/" + path.basename(fileName);
 				// wget the file locally
-				wgetTheFile(fileUrl, target)
+				await wgetTheFile(fileUrl, target)
 					.then((resolve) => response.send(resolve))
 					.catch((reject) => {
 						response.status(500).json(reject);
