@@ -65,15 +65,6 @@ function Config() {
 						<InputGroup>
 							<InputGroup.Prepend>
 								<InputGroup.Text>
-									<i className="bi bi-link-45deg"></i>&nbsp;Server URL
-								</InputGroup.Text>
-							</InputGroup.Prepend>
-							<FormControl placeholder="https://middleman-backend-server.herokuapp.com" name="serverUrl" value={localConfigHolder.serverUrl} onChange={handleConfigChanged} aria-label="Server URL" />
-						</InputGroup>
-						<br />
-						<InputGroup>
-							<InputGroup.Prepend>
-								<InputGroup.Text>
 									<i className="bi bi-envelope"></i>&nbsp;Your Mail ID
 								</InputGroup.Text>
 							</InputGroup.Prepend>

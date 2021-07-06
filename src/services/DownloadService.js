@@ -1,22 +1,20 @@
 import axios from "axios";
 import { toast } from "react-toastify";
+import Constants from "../utils/Constants";
 
 class DownloadService {
-	downloadFile(serverUrl, downloadUrl) {
-		if (serverUrl !== "") return axios.get(serverUrl + "/download?downloadUrl=" + downloadUrl);
-		else this.showErrorMessage();
+	downloadFile(downloadUrl) {
+		return axios.get(Constants.SERVER_URL + "/download?downloadUrl=" + downloadUrl);
 	}
 
-	getExistingDownloads(serverUrl) {
-		if (serverUrl !== "") return axios.get(serverUrl + "/api/middlemanDocs?size=100");
-		else this.showErrorMessage();
+	getExistingDownloads() {
+		return axios.get(Constants.SERVER_URL + "/api/middlemanDocs?size=100");
 	}
 
-	deleteFile(serverUrl, fileId) {
-		if (serverUrl !== "") {
+	async deleteFile(fileId) {
+		return axios.get(Constants.SERVER_URL + "/delete?id=" + fileId).then(() => {
 			toast.warning("🧯 File deleted from middleman cache");
-			return axios.get(serverUrl + "/delete?id=" + fileId);
-		} else this.showErrorMessage();
+		});
 	}
 
 	showErrorMessage() {

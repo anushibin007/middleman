@@ -1,5 +1,6 @@
 const Constants = {
-	LOCALSTORAGE_SERVER_URL_KEY: "MIDDLEMAN_SERVER_URL_KEY",
+	LOCALSTORAGE_CONFIG_KEY: "MIDDLEMAN_SERVER_URL_KEY",
+	SERVER_URL: process.env.SERVER_URL || "https://us-central1-middleman-e3e91.cloudfunctions.net",
 };
 
 export default Constants;

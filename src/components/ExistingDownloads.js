@@ -1,16 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import { Accordion, Row, Col, Button, Table } from "react-bootstrap";
-import { ConfigContext } from "../contexts/ConfigContext";
 import DownloadService from "../services/DownloadService";
 import ExistingDownload from "./ExistingDownload";
 import { toast } from "react-toastify";
 
 const ExistingDownloads = () => {
-	/**
-	 * Get configs from the Global Context
-	 */
-	const [configs] = useContext(ConfigContext);
-
 	/**
 	 * The state which stores the existing downloads as an array
 	 */
@@ -20,21 +14,14 @@ const ExistingDownloads = () => {
 	 * The funtion that makes an AJAX call to the server and gets the existing downloads as JSON
 	 */
 	const fetchExisting = () => {
-		if (configs.serverUrl) {
-			DownloadService.getExistingDownloads(configs.serverUrl)
-				.then((response) => {
-					setExistingDownloads(response.data._embedded.middlemanDocs);
-				})
-				.catch((err) => {
-					toast.error("😢 Sorry, an error occured: " + err);
-				});
-		}
+		DownloadService.getExistingDownloads()
+			.then((response) => {
+				setExistingDownloads(response.data._embedded.middlemanDocs);
+			})
+			.catch((err) => {
+				toast.error("😢 Sorry, an error occured: " + err);
+			});
 	};
-
-	/**
-	 * The existing downloads must be fetched every time the serverUrl updates
-	 */
-	useEffect(fetchExisting, [configs.serverUrl]);
 
 	/**
 	 * This function helps with rendering the output on the UI based on whether there are existing downloads or not
