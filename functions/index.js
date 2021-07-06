@@ -26,11 +26,16 @@ exports.upload = functions.https.onRequest((request, response) => {
 					});
 				// upload the file to Storage
 				await uploadFileToStorage(target, fileName)
-					.then((resolve) => response.json(resolve))
+					//.then((resolve) => response.json(resolve))
 					.catch((reject) => {
 						response.status(500).json(reject);
 					});
 				// Add an entry to DB
+				await addEntryToDB(fileUrl, fileName)
+					.then((resolve) => response.json(resolve))
+					.catch((reject) => {
+						response.status(500).json(reject);
+					});
 			} else {
 				functions.logger.error("fileUrl missing");
 				response.status(400).json({ error: "fileUrl missing" });
@@ -70,6 +75,25 @@ const uploadFileToStorage = (target, fileName) => {
 		} catch (err) {
 			reject({ err: err });
 		}
+	});
+};
+
+const addEntryToDB = (fileUrl, fileName) => {
+	return new Promise(async (resolve, reject) => {
+		const fileNameHash = Buffer.from(fileName).toString("base64");
+		const dataToWriteToDb = {
+			fileName: fileName,
+			fileUrl: fileUrl,
+			createdAt: new Date().getTime(),
+		};
+		db.ref("files/" + fileNameHash)
+			.set(dataToWriteToDb)
+			.then(() => {
+				resolve(dataToWriteToDb);
+			})
+			.catch((err) => {
+				reject({ err: err });
+			});
 	});
 };
 
