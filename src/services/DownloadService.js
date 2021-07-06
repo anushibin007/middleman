@@ -3,8 +3,8 @@ import { toast } from "react-toastify";
 import Constants from "../utils/Constants";
 
 class DownloadService {
-	downloadFile(downloadUrl) {
-		return axios.get(Constants.SERVER_URL + "/download?downloadUrl=" + downloadUrl);
+	uploadFile(fileUrl) {
+		return axios.get(Constants.SERVER_URL + "/upload?fileUrl=" + fileUrl);
 	}
 
 	getExistingDownloads() {

@@ -6,18 +6,18 @@ import "axios-progress-bar/dist/nprogress.css";
 import { toast } from "react-toastify";
 
 const Downloader = () => {
-	const [downloadUrl, setDownloadUrl] = useState("");
+	const [fileUrl, setFileUrl] = useState("");
 
 	const handleDownloadUrlChanged = (e) => {
-		setDownloadUrl(e.target.value);
+		setFileUrl(e.target.value);
 	};
 
 	const handleDownloadClicked = () => {
-		if (downloadUrl) {
+		if (fileUrl) {
 			loadProgressBar();
-			setDownloadUrl("");
+			setFileUrl("");
 			toast.success("✅ Download queued. Refresh to see the progress");
-			DownloadService.downloadFile(downloadUrl)
+			DownloadService.uploadFile(fileUrl)
 				.then(() => {
 					//if download was successful
 				})
@@ -39,7 +39,7 @@ const Downloader = () => {
 						<i className="bi bi-link-45deg"></i>
 					</InputGroup.Text>
 				</InputGroup.Prepend>
-				<FormControl placeholder="Download URL" value={downloadUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
+				<FormControl placeholder="Download URL" value={fileUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
 				<InputGroup.Append>
 					<Button onClick={handleDownloadClicked} type="submit">
 						<i className="bi bi-download"></i>&nbsp;Cache to Middleman
