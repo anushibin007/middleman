@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button } from "react-bootstrap";
+import { Button, ProgressBar } from "react-bootstrap";
 import { toast } from "react-toastify";
 import DownloadService from "../services/DownloadService";
 
@@ -57,7 +57,7 @@ const ExistingDownload = (props) => {
 		}
 	};
 
-	return (
+	/*return 
 		<tr className={getRowColorClassName()}>
 			<td>{getExistingDownloadUrl()}</td>
 			<td>{existingDownload.status}</td>
@@ -67,6 +67,17 @@ const ExistingDownload = (props) => {
 					<i className="bi bi-trash"></i>&nbsp;Delete
 				</Button>
 			</td>
+	</tr>
+	*/
+	return (
+		<tr>
+			<td>{existingDownload.fileUrl}</td>
+			<td>
+				{existingDownload.progress}
+				<ProgressBar now={existingDownload.progress} animated></ProgressBar>
+			</td>
+			<td>{existingDownload.fileName}</td>
+			<td>{existingDownload.createdAt}</td>
 		</tr>
 	);
 };

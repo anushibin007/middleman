@@ -16,7 +16,7 @@ const ExistingDownloads = () => {
 	const fetchExisting = () => {
 		DownloadService.getExistingDownloads()
 			.then((response) => {
-				setExistingDownloads(response.data._embedded.middlemanDocs);
+				setExistingDownloads([response.data.docs]);
 			})
 			.catch((err) => {
 				toast.error("😢 Sorry, an error occured: " + err);
@@ -28,7 +28,12 @@ const ExistingDownloads = () => {
 	 */
 	const validateExistingDownloads = () => {
 		if (existingDownloads.length !== 0) {
-			return existingDownloads.map((aDownload) => <ExistingDownload item={aDownload} key={aDownload.id} />);
+			let renderResponse = [];
+			var obj = existingDownloads[0];
+			for (var key in obj) {
+				renderResponse.push(<ExistingDownload item={obj[key]} key={key} />);
+			}
+			return renderResponse;
 		} else {
 			return (
 				<tr>

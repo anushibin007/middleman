@@ -8,7 +8,7 @@ class DownloadService {
 	}
 
 	getExistingDownloads() {
-		return axios.get(Constants.SERVER_URL + "/api/middlemanDocs?size=100");
+		return axios.get(Constants.SERVER_URL + "/getexisting");
 	}
 
 	async deleteFile(fileId) {
