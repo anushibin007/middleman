@@ -51,12 +51,14 @@ exports.upload = functions.https.onRequest((request, response) => {
 							});
 					});
 			} else {
-				functions.logger.error("fileUrl missing");
-				response.status(400).json({ error: "fileUrl missing" });
+				const failureMessage = { error: "fileUrl missing" };
+				functions.logger.error(failureMessage);
+				response.status(400).json(failureMessage);
 			}
 		} else {
-			functions.logger.error("Access Forbidden", { "request.hostname": request.hostname });
-			response.status(403).json({ error: "Access Forbidden" });
+			const failureMessage = { error: "Access Forbidden to " + request.hostname };
+			functions.logger.error(failureMessage);
+			response.status(403).json(failureMessage);
 		}
 	});
 });
