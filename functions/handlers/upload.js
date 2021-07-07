@@ -20,20 +20,21 @@ exports.handler = async (request, response, db, admin) => {
 			// If the file is not present in the DB. Fetch it
 			if (!fileExists) {
 				try {
-					// wget the file locally
-					await wgetTheFile(response, fileUrl, target);
-					// upload the file to Storage
-					await uploadFileToStorage(response, admin, target, fileName);
 					// Add an entry to DB
 					await addEntryToDB(response, db, fileUrl, fileName);
-					// Delete the file from local
-					deleteLocalFile(target);
-					response.json({ success: fileUrl + " uploaded successfully" });
+					// wget the file locally
+					wgetTheFile(response, fileUrl, target, db).then(async () => {
+						// upload the file to Storage
+						await uploadFileToStorage(response, admin, target, fileName, db, fileUrl);
+						// Delete the file from local
+						deleteLocalFile(target);
+					});
+					response.json({ success: fileUrl + " scheduled successfully" });
 				} catch (err) {
 					// ignore the error because we are handling it in individual methods
 				}
 			} else {
-				response.json({ success: fileUrl + " already exists" });
+				response.json({ success: fileUrl + " already exists", data: fileExists });
 			}
 		} else {
 			const failureMessage = { error: "fileUrl missing" };
@@ -54,10 +55,10 @@ const checkIfFileExists = (db, fileUrl) => {
 			.child(fileUrlHash)
 			.get()
 			.then((doc) => {
-				if (doc.exists()) {
+				if (doc.exists() && doc.val().progress != -1) {
 					const documentValue = doc.val();
 					functions.logger.info("File '" + fileUrl + "' already exists in storage", documentValue);
-					resolve(true);
+					resolve(documentValue);
 				} else {
 					functions.logger.info("File '" + fileUrl + "' does not exist in storage");
 					resolve(false);
@@ -70,8 +71,9 @@ const checkIfFileExists = (db, fileUrl) => {
 	});
 };
 
-const wgetTheFile = (response, fileUrl, target) => {
+const wgetTheFile = (response, fileUrl, target, db) => {
 	let download = wget.download(fileUrl, target);
+	let progressChunks = [0, 25, 50, 100];
 	return new Promise((resolve, reject) => {
 		download.on("end", (output) => {
 			functions.logger.info({ output });
@@ -80,15 +82,25 @@ const wgetTheFile = (response, fileUrl, target) => {
 		download.on("error", (err) => {
 			functions.logger.error({ err });
 			response.status(500).json({ error: "Could not download file due to : " + err });
+			setFileProgress(response, db, fileUrl, -1);
 			reject({ error: "Could not download file due to : " + err });
 		});
 		download.on("start", (fileSize) => {
 			functions.logger.info({ fileSize });
 		});
+		download.on("progress", async (progress) => {
+			// store the progress to the DB only once every 0, 25, 50 & 100%
+			const progressPercentage = parseInt(progress * 100);
+			if (parseInt(progress * 100) % 25 === 0 && progressChunks.includes(progressPercentage)) {
+				await setFileProgress(response, db, fileUrl, progressPercentage);
+				// we have reached x percent and stored it into DB once. So we need not do it again. So store remove that percent from the array
+				progressChunks = progressChunks.filter((e) => e != progressPercentage);
+			}
+		});
 	});
 };
 
-const uploadFileToStorage = (response, admin, target, fileName) => {
+const uploadFileToStorage = (response, admin, target, fileName, db, fileUrl) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const bucket = admin.storage().bucket();
@@ -100,8 +112,31 @@ const uploadFileToStorage = (response, admin, target, fileName) => {
 			const failureMessage = { err: err, message: "Cannot upload file to Storage" };
 			functions.logger.error(failureMessage);
 			response.status(500).json(failureMessage);
+			setFileProgress(response, db, fileUrl, -1);
 			reject(failureMessage);
 		}
+	});
+};
+
+const setFileProgress = (response, db, fileUrl, progress) => {
+	const fileUrlHash = getHash(fileUrl);
+	const dataToWriteToDb = {
+		fileUrl: fileUrl,
+		createdAt: new Date().getTime(),
+		progress: progress,
+	};
+	return new Promise(async (resolve, reject) => {
+		db.ref(DB_NAME + "/" + fileUrlHash)
+			.update(dataToWriteToDb)
+			.then(() => {
+				functions.logger.info(dataToWriteToDb);
+				resolve(dataToWriteToDb);
+			})
+			.catch((err) => {
+				functions.logger.error({ err: err });
+				response.status(500).json({ err: err });
+				reject({ err: err });
+			});
 	});
 };
 
@@ -111,6 +146,7 @@ const addEntryToDB = (response, db, fileUrl, fileName) => {
 		fileName: fileName,
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
+		progress: 0,
 	};
 	return new Promise(async (resolve, reject) => {
 		db.ref(DB_NAME + "/" + fileUrlHash)
