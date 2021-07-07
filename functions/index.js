@@ -4,6 +4,7 @@ admin.initializeApp(functions.config().firebase);
 const constants = require("./constants");
 const path = require("path");
 const os = require("os");
+const fs = require("fs");
 const wget = require("wget-improved");
 
 const cors = require("cors")({ origin: true });
@@ -41,6 +42,12 @@ exports.upload = functions.https.onRequest((request, response) => {
 							.then((resolve) => response.json(resolve))
 							.catch((reject) => {
 								response.status(500).json(reject);
+							});
+						// Delete the file from local
+						await deleteLocalFile(target)
+							//.then((resolve) => response.json(resolve))
+							.catch((reject) => {
+								// ignore the error
 							});
 					});
 			} else {
@@ -108,14 +115,14 @@ const uploadFileToStorage = (target, fileName) => {
 };
 
 const addEntryToDB = (fileUrl, fileName) => {
-	const fileNameHash = getHash(fileName);
+	const fileUrlHash = getHash(fileUrl);
 	const dataToWriteToDb = {
 		fileName: fileName,
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
 	};
 	return new Promise(async (resolve, reject) => {
-		db.ref(DB_NAME + "/" + fileNameHash)
+		db.ref(DB_NAME + "/" + fileUrlHash)
 			.set(dataToWriteToDb)
 			.then(() => {
 				functions.logger.info(dataToWriteToDb);
@@ -125,6 +132,21 @@ const addEntryToDB = (fileUrl, fileName) => {
 				functions.logger.error({ err: err });
 				reject({ err: err });
 			});
+	});
+};
+
+const deleteLocalFile = (target) => {
+	return new Promise((resolve, reject) => {
+		fs.unlink(target, (err) => {
+			if (err) {
+				const failureMessage = { error: "File '" + target + "' could not be deleted. Error: " + err };
+				functions.logger.error(failureMessage);
+				reject(failureMessage);
+			}
+			const successMessage = { success: "File '" + target + "' deleted from filesystem" };
+			functions.logger.info(successMessage);
+			resolve(successMessage);
+		});
 	});
 };
 
