@@ -12,11 +12,12 @@ const Downloader = () => {
 		setFileUrl(e.target.value);
 	};
 
-	const handleDownloadClicked = () => {
+	const handleDownloadClicked = (e) => {
+		e.preventDefault();
 		if (fileUrl) {
 			loadProgressBar();
 			setFileUrl("");
-			toast.success("✅ Download queued. Refresh to see the progress");
+			toast.success("✅ Download queued");
 			DownloadService.uploadFile(fileUrl)
 				.then(() => {
 					//if download was successful
@@ -33,19 +34,21 @@ const Downloader = () => {
 	return (
 		<React.Fragment>
 			<h5>Cache files to Middleman</h5>
-			<InputGroup>
-				<InputGroup.Prepend>
-					<InputGroup.Text>
-						<i className="bi bi-link-45deg"></i>
-					</InputGroup.Text>
-				</InputGroup.Prepend>
-				<FormControl placeholder="Download URL" value={fileUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
-				<InputGroup.Append>
-					<Button onClick={handleDownloadClicked} type="submit">
-						<i className="bi bi-download"></i>&nbsp;Cache to Middleman
-					</Button>
-				</InputGroup.Append>
-			</InputGroup>
+			<form onSubmit={handleDownloadClicked}>
+				<InputGroup>
+					<InputGroup.Prepend>
+						<InputGroup.Text>
+							<i className="bi bi-link-45deg"></i>
+						</InputGroup.Text>
+					</InputGroup.Prepend>
+					<FormControl placeholder="Download URL" value={fileUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
+					<InputGroup.Append>
+						<Button onClick={handleDownloadClicked} type="submit">
+							<i className="bi bi-download"></i>&nbsp;Cache to Middleman
+						</Button>
+					</InputGroup.Append>
+				</InputGroup>
+			</form>
 		</React.Fragment>
 	);
 };
