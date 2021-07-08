@@ -21,7 +21,7 @@ exports.handler = async (request, response, db, admin) => {
 			if (!fileExists) {
 				try {
 					// Add an entry to DB
-					await addEntryToDB(response, db, fileUrl, fileName);
+					await setFileProgress(response, db, fileUrl, 0);
 					// wget the file locally
 					wgetTheFile(response, fileUrl, target, db).then(async () => {
 						// upload the file to Storage
@@ -29,7 +29,7 @@ exports.handler = async (request, response, db, admin) => {
 						// Delete the file from local
 						deleteLocalFile(target);
 					});
-					response.json({ success: fileUrl + " scheduled successfully" });
+					response.json({ success: fileUrl + " scheduled successfully. Refresh to see progress." });
 				} catch (err) {
 					// ignore the error because we are handling it in individual methods
 				}
@@ -91,7 +91,7 @@ const wgetTheFile = (response, fileUrl, target, db) => {
 		download.on("progress", async (progress) => {
 			// store the progress to the DB only once every 0, 25, 50 & 100%
 			const progressPercentage = parseInt(progress * 100);
-			if (parseInt(progress * 100) % 25 === 0 && progressChunks.includes(progressPercentage)) {
+			if (progressChunks.includes(progressPercentage)) {
 				await setFileProgress(response, db, fileUrl, progressPercentage);
 				// we have reached x percent and stored it into DB once. So we need not do it again. So store remove that percent from the array
 				progressChunks = progressChunks.filter((e) => e != progressPercentage);
@@ -120,7 +120,9 @@ const uploadFileToStorage = (response, admin, target, fileName, db, fileUrl) => 
 
 const setFileProgress = (response, db, fileUrl, progress) => {
 	const fileUrlHash = getHash(fileUrl);
+	const fileName = path.basename(fileUrl);
 	const dataToWriteToDb = {
+		fileName: fileName,
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
 		progress: progress,
@@ -128,29 +130,6 @@ const setFileProgress = (response, db, fileUrl, progress) => {
 	return new Promise(async (resolve, reject) => {
 		db.ref(DB_NAME + "/" + fileUrlHash)
 			.update(dataToWriteToDb)
-			.then(() => {
-				functions.logger.info(dataToWriteToDb);
-				resolve(dataToWriteToDb);
-			})
-			.catch((err) => {
-				functions.logger.error({ err: err });
-				response.status(500).json({ err: err });
-				reject({ err: err });
-			});
-	});
-};
-
-const addEntryToDB = (response, db, fileUrl, fileName) => {
-	const fileUrlHash = getHash(fileUrl);
-	const dataToWriteToDb = {
-		fileName: fileName,
-		fileUrl: fileUrl,
-		createdAt: new Date().getTime(),
-		progress: 0,
-	};
-	return new Promise(async (resolve, reject) => {
-		db.ref(DB_NAME + "/" + fileUrlHash)
-			.set(dataToWriteToDb)
 			.then(() => {
 				functions.logger.info(dataToWriteToDb);
 				resolve(dataToWriteToDb);
