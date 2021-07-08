@@ -135,9 +135,9 @@ const getFileSize = async (fileUrl) => {
 				}
 				const fileSize = response.headers["content-length"];
 				if (fileSize) {
-					functions.logger.warn("Could not get file size from header. Setting it to -1");
 					resolve(parseInt(fileSize));
 				} else {
+					functions.logger.warn("Could not get file size from header. Setting it to -1");
 					resolve(-1);
 				}
 			}
