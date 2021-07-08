@@ -1,9 +1,5 @@
 const constants = require("../utils/constants");
 const functions = require("firebase-functions");
-const path = require("path");
-const os = require("os");
-const fs = require("fs");
-const wget = require("wget-improved");
 
 const DB_NAME = "files";
 
