@@ -67,15 +67,16 @@ const checkIfFileExists = (db, fileUrl) => {
 
 const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 	return new Promise(async (resolve, reject) => {
+		const start = new Date();
+		var secondsLogged = [];
+		const fileSize = await getFileSize(fileUrl);
+		functions.logger.info({ fileSize });
 		try {
 			const bucket = admin.storage().bucket();
 			const file = bucket.file(fileName);
 			request(fileUrl).pipe;
 			request(fileUrl)
 				.pipe(file.createWriteStream())
-				.on("response", function (data) {
-					console.log("content-length: " + data.headers["content-length"]);
-				})
 				.on("error", (err) => {
 					functions.logger.info({ err });
 					reject({ err });
@@ -88,7 +89,23 @@ const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 					resolve(successMessage);
 				})
 				.on("progress", (progress) => {
-					//console.log({ progress });
+					// Update the progress only if we have a valid file size.
+					// Else it will get directly updated to 100 in the end.
+					if (fileSize > 0) {
+						// get seconds elapsed in rounded time like 0, 1, 2, ...
+						const secondsElapsed = parseInt((new Date() - start) / 1000);
+
+						// Update progress every 5 seconds
+						if (!secondsLogged.includes(secondsElapsed) && secondsElapsed % 5 == 0) {
+							// Record that we have logged progress at x seconds already
+							secondsLogged.push(secondsElapsed);
+
+							// Log the progress %
+							const progressPercent = parseInt(progress.bytesWritten / fileSize) * 100;
+							setFileProgress(response, db, fileUrl, progressPercent);
+							functions.logger.info({ progressPercent });
+						}
+					}
 				});
 		} catch (err) {
 			const failureMessage = { err: err, message: "Cannot upload file to Storage" };
@@ -97,6 +114,32 @@ const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 			setFileProgress(response, db, fileUrl, -1);
 			reject(failureMessage);
 		}
+	});
+};
+
+const getFileSize = async (fileUrl) => {
+	return new Promise((resolve) => {
+		request(
+			{
+				url: fileUrl,
+				method: "HEAD",
+			},
+			(err, response) => {
+				if (err) {
+					functions.logger.warn("Error while trying to check file size", { err });
+					// This could also mean that the file is not accessible properly.
+					// So set the progress to -1 just in case
+					setFileProgress(response, db, fileUrl, -1);
+					resolve(-1);
+				}
+				const fileSize = response.headers["content-length"];
+				if (fileSize) {
+					resolve(parseInt(fileSize));
+				} else {
+					resolve(-1);
+				}
+			}
+		);
 	});
 };
 
