@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Accordion, Row, Col, Button, Table } from "react-bootstrap";
-import DownloadService from "../services/DownloadService";
+import { Accordion, Row, Col, Table } from "react-bootstrap";
 import ExistingDownload from "./ExistingDownload";
 import { toast } from "react-toastify";
 import firebase from "firebase";
