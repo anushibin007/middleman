@@ -77,7 +77,11 @@ const ExistingDownload = (props) => {
 				{existingDownload.progress}
 				<ProgressBar now={existingDownload.progress} animated></ProgressBar>
 			</td>
-			<td>{existingDownload.createdAt}</td>
+			<td>
+				{new Date(existingDownload.createdAt).toDateString()}
+				<br />
+				{new Date(existingDownload.createdAt).toLocaleTimeString()}
+			</td>
 		</tr>
 	);
 };
