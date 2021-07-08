@@ -4,6 +4,7 @@ const path = require("path");
 const request = require("request");
 
 const DB_NAME = "files";
+const FOLDER_NAME = "public";
 
 exports.handler = async (request, response, db, admin) => {
 	functions.logger.info("Entering upload function", { "request.hostname": request.hostname });
@@ -71,7 +72,7 @@ const uploadFileToStorage = async (response, admin, fileName, db, fileUrl) => {
 	const fileSize = await getFileSize(fileUrl);
 	functions.logger.info({ fileSize });
 	const bucket = admin.storage().bucket();
-	const file = bucket.file(fileName);
+	const file = bucket.file(FOLDER_NAME + "/" + fileName);
 
 	return new Promise(async (resolve, reject) => {
 		try {
