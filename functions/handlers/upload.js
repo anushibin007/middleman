@@ -92,7 +92,7 @@ const wgetTheFile = (response, fileUrl, target, db) => {
 			// store the progress to the DB only once every 0, 25, 50 & 100%
 			const progressPercentage = parseInt(progress * 100);
 			if (progressChunks.includes(progressPercentage)) {
-				await setFileProgress(response, db, fileUrl, progressPercentage);
+				setFileProgress(response, db, fileUrl, progressPercentage);
 				// we have reached x percent and stored it into DB once. So we need not do it again. So store remove that percent from the array
 				progressChunks = progressChunks.filter((e) => e != progressPercentage);
 			}
