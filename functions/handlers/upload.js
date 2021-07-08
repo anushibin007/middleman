@@ -101,7 +101,7 @@ const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 							secondsLogged.push(secondsElapsed);
 
 							// Log the progress %
-							const progressPercent = parseInt(progress.bytesWritten / fileSize) * 100;
+							const progressPercent = parseInt((progress.bytesWritten / fileSize) * 100);
 							setFileProgress(response, db, fileUrl, progressPercent);
 							functions.logger.info({ progressPercent });
 						}
