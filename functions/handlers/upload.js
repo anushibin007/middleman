@@ -73,10 +73,11 @@ const checkIfFileExists = (db, fileUrl) => {
 
 const wgetTheFile = (response, fileUrl, target, db) => {
 	let download = wget.download(fileUrl, target);
-	let progressChunks = [0, 25, 50, 100];
+	//let progressChunks = [0, 25, 50, 100];
 	return new Promise((resolve, reject) => {
 		download.on("end", (output) => {
 			functions.logger.info({ output });
+			setFileProgress(response, db, fileUrl, 100);
 			resolve({ success: output });
 		});
 		download.on("error", (err) => {
@@ -88,7 +89,7 @@ const wgetTheFile = (response, fileUrl, target, db) => {
 		download.on("start", (fileSize) => {
 			functions.logger.info({ fileSize });
 		});
-		download.on("progress", async (progress) => {
+		/*download.on("progress", async (progress) => {
 			// store the progress to the DB only once every 0, 25, 50 & 100%
 			const progressPercentage = parseInt(progress * 100);
 			if (progressChunks.includes(progressPercentage)) {
@@ -96,7 +97,7 @@ const wgetTheFile = (response, fileUrl, target, db) => {
 				// we have reached x percent and stored it into DB once. So we need not do it again. So store remove that percent from the array
 				progressChunks = progressChunks.filter((e) => e != progressPercentage);
 			}
-		});
+		});*/
 	});
 };
 
