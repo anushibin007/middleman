@@ -72,11 +72,11 @@ const ExistingDownload = (props) => {
 	return (
 		<tr>
 			<td>{existingDownload.fileUrl}</td>
+			<td>{existingDownload.fileName}</td>
 			<td>
 				{existingDownload.progress}
 				<ProgressBar now={existingDownload.progress} animated></ProgressBar>
 			</td>
-			<td>{existingDownload.fileName}</td>
 			<td>{existingDownload.createdAt}</td>
 		</tr>
 	);

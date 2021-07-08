@@ -1,37 +1,47 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Row, Col, Button, Table } from "react-bootstrap";
 import DownloadService from "../services/DownloadService";
 import ExistingDownload from "./ExistingDownload";
 import { toast } from "react-toastify";
+import firebase from "firebase";
 
 const ExistingDownloads = () => {
 	/**
 	 * The state which stores the existing downloads as an array
 	 */
-	const [existingDownloads, setExistingDownloads] = useState([]);
+	const [existingDownloads, setExistingDownloads] = useState({});
+
+	const db = firebase.database();
+	const dbRef = db.ref("files/");
 
 	/**
-	 * The funtion that makes an AJAX call to the server and gets the existing downloads as JSON
+	 * Initial setup
 	 */
-	const fetchExisting = () => {
-		DownloadService.getExistingDownloads()
-			.then((response) => {
-				setExistingDownloads([response.data.docs]);
-			})
-			.catch((err) => {
-				toast.error("😢 Sorry, an error occured: " + err);
-			});
-	};
+	useEffect(() => {
+		dbRef.on(
+			"value",
+			async (snapshot) => {
+				setExistingDownloads(snapshot.val());
+			},
+			(errorObject) => {
+				toast.error("Could not read from DB: " + errorObject.name);
+			}
+		);
+
+		window.onbeforeunload = () => {
+			// Make sure to disconnect the DB ref when the page unloads
+			dbRef.off();
+		};
+	}, []);
 
 	/**
 	 * This function helps with rendering the output on the UI based on whether there are existing downloads or not
 	 */
 	const validateExistingDownloads = () => {
-		if (existingDownloads.length !== 0) {
+		if (existingDownloads && Object.keys(existingDownloads).length > 0) {
 			let renderResponse = [];
-			var obj = existingDownloads[0];
-			for (var key in obj) {
-				renderResponse.push(<ExistingDownload item={obj[key]} key={key} />);
+			for (var key in existingDownloads) {
+				renderResponse.push(<ExistingDownload item={existingDownloads[key]} key={key} />);
 			}
 			return renderResponse;
 		} else {
@@ -47,12 +57,7 @@ const ExistingDownloads = () => {
 		<Accordion defaultActiveKey="0">
 			<Row>
 				<Col>
-					<h5>Files in Middleman</h5>
-				</Col>
-				<Col>
-					<Button variant="warning" onClick={fetchExisting} className="float-end">
-						<i className="bi bi-arrow-repeat"></i> Refresh
-					</Button>
+					<h5>Files in Middleman ({existingDownloads ? Object.keys(existingDownloads).length : 0})</h5>
 				</Col>
 			</Row>
 			<Row>
@@ -60,9 +65,9 @@ const ExistingDownloads = () => {
 					<thead>
 						<tr>
 							<th>Original Download URL</th>
+							<th>File Name</th>
 							<th>Status</th>
-							<th>Download from Middleman</th>
-							<th>Delete from Middleman</th>
+							<th>Created Time</th>
 						</tr>
 					</thead>
 					<tbody>{validateExistingDownloads()}</tbody>
