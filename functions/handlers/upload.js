@@ -4,7 +4,6 @@ const path = require("path");
 const request = require("request");
 
 const DB_NAME = "files";
-const USER_ID = "public";
 
 exports.handler = async (request, response, db, admin) => {
 	functions.logger.info("Entering upload function", { "request.hostname": request.hostname });
@@ -71,7 +70,7 @@ const uploadFileToStorage = async (response, admin, fileName, db, fileUrl) => {
 	var secondsLogged = [];
 	const fileSize = await getFileSize(fileUrl);
 	functions.logger.info({ fileSize });
-	const bucket = admin.storage().bucket(USER_ID);
+	const bucket = admin.storage().bucket();
 	const file = bucket.file(fileName);
 
 	return new Promise(async (resolve, reject) => {
