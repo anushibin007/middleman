@@ -4,6 +4,7 @@ const path = require("path");
 const request = require("request");
 
 const DB_NAME = "files";
+const USER_ID = "public";
 
 exports.handler = async (request, response, db, admin) => {
 	functions.logger.info("Entering upload function", { "request.hostname": request.hostname });
@@ -65,29 +66,18 @@ const checkIfFileExists = (db, fileUrl) => {
 	});
 };
 
-const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
+const uploadFileToStorage = async (response, admin, fileName, db, fileUrl) => {
+	const start = new Date();
+	var secondsLogged = [];
+	const fileSize = await getFileSize(fileUrl);
+	functions.logger.info({ fileSize });
+	const bucket = admin.storage().bucket(USER_ID);
+	const file = bucket.file(fileName);
+
 	return new Promise(async (resolve, reject) => {
-		const start = new Date();
-		var secondsLogged = [];
-		const fileSize = await getFileSize(fileUrl);
-		functions.logger.info({ fileSize });
 		try {
-			const bucket = admin.storage().bucket();
-			const file = bucket.file(fileName);
-			request(fileUrl).pipe;
 			request(fileUrl)
 				.pipe(file.createWriteStream())
-				.on("error", (err) => {
-					functions.logger.info({ err });
-					reject({ err });
-					response.status(500).json({ err });
-				})
-				.on("finish", async () => {
-					await setFileProgress(response, db, fileUrl, 100);
-					const successMessage = { success: "File '" + fileName + "' written to Storage" };
-					functions.logger.info(successMessage);
-					resolve(successMessage);
-				})
 				.on("progress", (progress) => {
 					// Update the progress only if we have a valid file size.
 					// Else it will get directly updated to 100 in the end.
@@ -106,6 +96,17 @@ const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 							functions.logger.info({ progressPercent });
 						}
 					}
+				})
+				.on("error", (err) => {
+					functions.logger.info({ err });
+					reject({ err });
+					response.status(500).json({ err });
+				})
+				.on("finish", async () => {
+					await setFileProgress(response, db, fileUrl, 100);
+					const successMessage = { success: "File '" + fileName + "' written to Storage" };
+					functions.logger.info(successMessage);
+					resolve(successMessage);
 				});
 		} catch (err) {
 			const failureMessage = { err: err, message: "Cannot upload file to Storage" };
@@ -134,6 +135,7 @@ const getFileSize = async (fileUrl) => {
 				}
 				const fileSize = response.headers["content-length"];
 				if (fileSize) {
+					functions.logger.warn("Could not get file size from header. Setting it to -1");
 					resolve(parseInt(fileSize));
 				} else {
 					resolve(-1);
