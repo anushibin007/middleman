@@ -1,9 +1,7 @@
 const constants = require("../utils/constants");
 const functions = require("firebase-functions");
 const path = require("path");
-const os = require("os");
-const fs = require("fs");
-const wget = require("wget-improved");
+const request = require("request");
 
 const DB_NAME = "files";
 
@@ -13,7 +11,6 @@ exports.handler = async (request, response, db, admin) => {
 		const fileUrl = request.query.fileUrl;
 		if (fileUrl) {
 			const fileName = path.basename(fileUrl);
-			const target = os.tmpdir() + "/" + path.basename(fileName);
 			// Check if the file already exists
 			let fileExists = await checkIfFileExists(db, fileUrl);
 
@@ -22,13 +19,10 @@ exports.handler = async (request, response, db, admin) => {
 				try {
 					// Add an entry to DB
 					await setFileProgress(response, db, fileUrl, 0);
-					// wget the file locally
-					wgetTheFile(response, fileUrl, target, db).then(async () => {
-						// upload the file to Storage
-						await uploadFileToStorage(response, admin, target, fileName, db, fileUrl);
-						// Delete the file from local
-						deleteLocalFile(target);
-					});
+
+					// pipe the remote stream to the Storage
+					uploadFileToStorage(response, admin, fileName, db, fileUrl);
+
 					response.json({ success: fileUrl + " scheduled successfully. Refresh to see progress." });
 				} catch (err) {
 					// ignore the error because we are handling it in individual methods
@@ -71,44 +65,31 @@ const checkIfFileExists = (db, fileUrl) => {
 	});
 };
 
-const wgetTheFile = (response, fileUrl, target, db) => {
-	let download = wget.download(fileUrl, target);
-	//let progressChunks = [0, 25, 50, 100];
-	return new Promise((resolve, reject) => {
-		download.on("end", (output) => {
-			functions.logger.info({ output });
-			setFileProgress(response, db, fileUrl, 100);
-			resolve({ success: output });
-		});
-		download.on("error", (err) => {
-			functions.logger.error({ err });
-			response.status(500).json({ error: "Could not download file due to : " + err });
-			setFileProgress(response, db, fileUrl, -1);
-			reject({ error: "Could not download file due to : " + err });
-		});
-		download.on("start", (fileSize) => {
-			functions.logger.info({ fileSize });
-		});
-		/*download.on("progress", async (progress) => {
-			// store the progress to the DB only once every 0, 25, 50 & 100%
-			const progressPercentage = parseInt(progress * 100);
-			if (progressChunks.includes(progressPercentage)) {
-				setFileProgress(response, db, fileUrl, progressPercentage);
-				// we have reached x percent and stored it into DB once. So we need not do it again. So store remove that percent from the array
-				progressChunks = progressChunks.filter((e) => e != progressPercentage);
-			}
-		});*/
-	});
-};
-
-const uploadFileToStorage = (response, admin, target, fileName, db, fileUrl) => {
+const uploadFileToStorage = (response, admin, fileName, db, fileUrl) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			const bucket = admin.storage().bucket();
-			await bucket.upload(target, { destination: fileName });
-			const successMessage = { success: "File '" + fileName + "' written to Storage" };
-			functions.logger.info(successMessage);
-			resolve(successMessage);
+			const file = bucket.file(fileName);
+			request(fileUrl).pipe;
+			request(fileUrl)
+				.pipe(file.createWriteStream())
+				.on("response", function (data) {
+					console.log("content-length: " + data.headers["content-length"]);
+				})
+				.on("error", (err) => {
+					functions.logger.info({ err });
+					reject({ err });
+					response.status(500).json({ err });
+				})
+				.on("finish", async () => {
+					await setFileProgress(response, db, fileUrl, 100);
+					const successMessage = { success: "File '" + fileName + "' written to Storage" };
+					functions.logger.info(successMessage);
+					resolve(successMessage);
+				})
+				.on("progress", (progress) => {
+					//console.log({ progress });
+				});
 		} catch (err) {
 			const failureMessage = { err: err, message: "Cannot upload file to Storage" };
 			functions.logger.error(failureMessage);
@@ -140,21 +121,6 @@ const setFileProgress = (response, db, fileUrl, progress) => {
 				response.status(500).json({ err: err });
 				reject({ err: err });
 			});
-	});
-};
-
-const deleteLocalFile = (target) => {
-	return new Promise((resolve, reject) => {
-		fs.unlink(target, (err) => {
-			if (err) {
-				const failureMessage = { error: "File '" + target + "' could not be deleted. Error: " + err };
-				functions.logger.error(failureMessage);
-				reject(failureMessage);
-			}
-			const successMessage = { success: "File '" + target + "' deleted from filesystem" };
-			functions.logger.info(successMessage);
-			resolve(successMessage);
-		});
 	});
 };
 
