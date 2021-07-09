@@ -8,7 +8,7 @@ function Navigation() {
 	return (
 		<div>
 			<Navbar bg="light" expand="lg">
-				<Navbar.Brand>Middleman</Navbar.Brand>
+				<Navbar.Brand>🏃‍♂️ Middleman</Navbar.Brand>
 				<Navbar.Toggle aria-controls="jsc-navbar" />
 				<Navbar.Collapse id="jsc-navbar">
 					<Nav className="mr-auto">

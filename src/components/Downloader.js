@@ -33,18 +33,16 @@ const Downloader = () => {
 
 	return (
 		<React.Fragment>
-			<h5>Cache files to Middleman</h5>
+			<h5>🔥 Cache files to Middleman</h5>
 			<form onSubmit={handleDownloadClicked}>
 				<InputGroup>
 					<InputGroup.Prepend>
-						<InputGroup.Text>
-							<i className="bi bi-link-45deg"></i>
-						</InputGroup.Text>
+						<InputGroup.Text>🔗</InputGroup.Text>
 					</InputGroup.Prepend>
 					<FormControl placeholder="Download URL" value={fileUrl} onChange={handleDownloadUrlChanged} aria-label="Download URL" />
 					<InputGroup.Append>
 						<Button onClick={handleDownloadClicked} type="submit">
-							<i className="bi bi-download"></i>&nbsp;Cache to Middleman
+							🚀 Cache to Middleman
 						</Button>
 					</InputGroup.Append>
 				</InputGroup>

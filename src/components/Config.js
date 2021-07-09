@@ -51,22 +51,18 @@ function Config() {
 	return (
 		<React.Fragment>
 			<Button variant="navbar-btn" onClick={handleShow}>
-				<i className="bi bi-gear"></i>&nbsp;Config
+				⚙ Config
 			</Button>
 
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>
-						<i className="bi bi-gear"></i>&nbsp;Config
-					</Modal.Title>
+					<Modal.Title>⚙ Config</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<div className="d-flex flex-column">
 						<InputGroup>
 							<InputGroup.Prepend>
-								<InputGroup.Text>
-									<i className="bi bi-envelope"></i>&nbsp;Your Mail ID
-								</InputGroup.Text>
+								<InputGroup.Text>✉ Your Mail ID</InputGroup.Text>
 							</InputGroup.Prepend>
 							<FormControl type="email" placeholder="me@gmail.com" name="userMailId" value={localConfigHolder.userMailId} onChange={handleConfigChanged} aria-label="Server URL" />
 						</InputGroup>
@@ -74,10 +70,10 @@ function Config() {
 				</Modal.Body>
 				<Modal.Footer>
 					<Button variant="danger" onClick={handleClose}>
-						<i className="bi bi-x-circle"></i>&nbsp;Close
+						🏃‍♀️ Close
 					</Button>
 					<Button variant="success" onClick={handleSave}>
-						<i className="bi bi-save"></i>&nbsp;Save
+						💾 Save
 					</Button>
 				</Modal.Footer>
 			</Modal>

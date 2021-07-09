@@ -11,14 +11,12 @@ function About() {
 	return (
 		<React.Fragment>
 			<Button variant="navbar-btn" onClick={handleShow}>
-				<i className="bi bi-person"></i>&nbsp;About Me
+				👱‍♂️ About Me
 			</Button>
 
 			<Modal show={show} onHide={handleClose}>
 				<Modal.Header>
-					<Modal.Title>
-						<i className="bi bi-person"></i>&nbsp;About Me
-					</Modal.Title>
+					<Modal.Title>👱‍♂️ About Me</Modal.Title>
 				</Modal.Header>
 				<Modal.Body>
 					<div className="d-flex flex-column">

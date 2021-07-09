@@ -42,22 +42,6 @@ const ExistingDownload = (props) => {
 		toast("🚀 Still under Development. Stay Tuned!");
 	};
 
-	const getDownloadOrRetryButton = () => {
-		if (existingDownload.status === "error") {
-			return (
-				<Button variant="warning" disabled={getButtonsDisabledStatus()} onClick={retryDownload}>
-					<i className="bi bi-download"></i>&nbsp;Retry
-				</Button>
-			);
-		} else {
-			return (
-				<Button variant="success" disabled={getButtonsDisabledStatus()} onClick={downloadFileFromMiddleman}>
-					<i className="bi bi-download"></i>&nbsp;Download
-				</Button>
-			);
-		}
-	};
-
 	const getFileSize = () => {
 		if (existingDownload.size) {
 			const size = Math.round((existingDownload.size / 1024 / 1024) * 100) / 100;
@@ -73,18 +57,6 @@ const ExistingDownload = (props) => {
 		}
 	};
 
-	/*return 
-		<tr className={getRowColorClassName()}>
-			<td>{getExistingDownloadUrl()}</td>
-			<td>{existingDownload.status}</td>
-			<td>{getDownloadOrRetryButton()}</td>
-			<td>
-				<Button variant="danger" disabled={getButtonsDisabledStatus()} onClick={deleteFileFromMiddleman}>
-					<i className="bi bi-trash"></i>&nbsp;Delete
-				</Button>
-			</td>
-	</tr>
-	*/
 	return (
 		<tr>
 			<td>

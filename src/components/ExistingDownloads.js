@@ -56,21 +56,21 @@ const ExistingDownloads = () => {
 		<Accordion defaultActiveKey="0">
 			<Row>
 				<Col>
-					<h5>Files in Middleman ({existingDownloads ? Object.keys(existingDownloads).length : 0})</h5>
+					<h5>🗃 Files in Middleman ({existingDownloads ? Object.keys(existingDownloads).length : 0})</h5>
 				</Col>
 			</Row>
 			<Row>
 				<Table striped bordered hover responsive>
 					<thead>
 						<tr>
-							<th>Original Download URL</th>
-							<th>Size (MB)</th>
+							<th>🔗 Original Download URL</th>
+							<th>📏 Size (MB)</th>
 							<th>
-								Download <br />
+								🚀 Download <br />
 								from Middleman
 							</th>
-							<th>Status</th>
-							<th>Created Time</th>
+							<th>⛽ Status</th>
+							<th>🕐 Created Time</th>
 						</tr>
 					</thead>
 					<tbody>{validateExistingDownloads()}</tbody>
