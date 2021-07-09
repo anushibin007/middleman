@@ -41,12 +41,19 @@ exports.handler = async (aRequest, aResponse, anAdmin) => {
 					// pipe the remote stream to the Storage
 					uploadFileToStorage(fileName);
 
-					httpResponse.json({ success: fileUrl + " scheduled successfully. Refresh to see progress." });
+					httpResponse.json({ success: fileUrl + " scheduled successfully. Refresh to see progress.", kind: "scheduled" });
 				} catch (err) {
-					// ignore the error because we are handling it in individual methods
+					try {
+						setFileProgress(-1);
+					} catch (err) {
+						// ignore the error
+					}
+					const failureMessage = "FATAL Error. Could not serve the request";
+					functions.logger.error(failureMessage, { err });
+					httpResponse.status(500).json(failureMessage, { err });
 				}
 			} else {
-				httpResponse.json({ success: fileUrl + " already exists", data: fileExists });
+				httpResponse.json({ success: fileUrl + " already exists", kind: "exists", data: fileExists });
 			}
 		} else {
 			const failureMessage = { error: "fileUrl missing" };
@@ -114,10 +121,10 @@ const uploadFileToStorage = async (fileName) => {
 						}
 					}
 				})
-				.on("error", (err) => {
-					functions.logger.info({ err });
+				.on("error", async (err) => {
+					await setFileProgress(-1);
+					functions.logger.error({ err });
 					reject({ err });
-					httpResponse.status(500).json({ err });
 				})
 				.on("finish", async () => {
 					await setFileProgress(100);
@@ -127,9 +134,8 @@ const uploadFileToStorage = async (fileName) => {
 				});
 		} catch (err) {
 			const failureMessage = { err: err, message: "Cannot upload file to Storage" };
-			functions.logger.error(failureMessage);
-			httpResponse.status(500).json(failureMessage);
 			setFileProgress(-1);
+			functions.logger.error(failureMessage);
 			reject(failureMessage);
 		}
 	});
@@ -171,9 +177,9 @@ const setDBMetadata = (dataToWriteToDb) => {
 				functions.logger.info(dataToWriteToDb);
 				resolve(dataToWriteToDb);
 			})
-			.catch((err) => {
+			.catch(async (err) => {
+				await setFileProgress(-1);
 				functions.logger.error({ err: err });
-				httpResponse.status(500).json({ err: err });
 				reject({ err: err });
 			});
 	});
