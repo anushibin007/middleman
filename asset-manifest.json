@@ -1,26 +1,25 @@
 {
   "files": {
     "main.css": "/middleman/static/css/main.89a7a8cf.chunk.css",
-    "main.js": "/middleman/static/js/main.218ff537.chunk.js",
-    "main.js.map": "/middleman/static/js/main.218ff537.chunk.js.map",
-    "runtime-main.js": "/middleman/static/js/runtime-main.5a076c86.js",
-    "runtime-main.js.map": "/middleman/static/js/runtime-main.5a076c86.js.map",
-    "static/css/2.c9de2c06.chunk.css": "/middleman/static/css/2.c9de2c06.chunk.css",
-    "static/js/2.f24d6f2c.chunk.js": "/middleman/static/js/2.f24d6f2c.chunk.js",
-    "static/js/2.f24d6f2c.chunk.js.map": "/middleman/static/js/2.f24d6f2c.chunk.js.map",
-    "static/js/3.f863d90b.chunk.js": "/middleman/static/js/3.f863d90b.chunk.js",
-    "static/js/3.f863d90b.chunk.js.map": "/middleman/static/js/3.f863d90b.chunk.js.map",
+    "main.js": "/middleman/static/js/main.be6ba613.chunk.js",
+    "main.js.map": "/middleman/static/js/main.be6ba613.chunk.js.map",
+    "runtime-main.js": "/middleman/static/js/runtime-main.168a4049.js",
+    "runtime-main.js.map": "/middleman/static/js/runtime-main.168a4049.js.map",
+    "static/css/2.7c44a85c.chunk.css": "/middleman/static/css/2.7c44a85c.chunk.css",
+    "static/js/2.cdf567e8.chunk.js": "/middleman/static/js/2.cdf567e8.chunk.js",
+    "static/js/2.cdf567e8.chunk.js.map": "/middleman/static/js/2.cdf567e8.chunk.js.map",
+    "static/js/3.f1b3c516.chunk.js": "/middleman/static/js/3.f1b3c516.chunk.js",
+    "static/js/3.f1b3c516.chunk.js.map": "/middleman/static/js/3.f1b3c516.chunk.js.map",
     "index.html": "/middleman/index.html",
-    "static/css/2.c9de2c06.chunk.css.map": "/middleman/static/css/2.c9de2c06.chunk.css.map",
+    "static/css/2.7c44a85c.chunk.css.map": "/middleman/static/css/2.7c44a85c.chunk.css.map",
     "static/css/main.89a7a8cf.chunk.css.map": "/middleman/static/css/main.89a7a8cf.chunk.css.map",
-    "static/js/2.f24d6f2c.chunk.js.LICENSE.txt": "/middleman/static/js/2.f24d6f2c.chunk.js.LICENSE.txt",
-    "static/media/bootstrap-icons.css": "/middleman/static/media/bootstrap-icons.dfd0ea12.woff2"
+    "static/js/2.cdf567e8.chunk.js.LICENSE.txt": "/middleman/static/js/2.cdf567e8.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.5a076c86.js",
-    "static/css/2.c9de2c06.chunk.css",
-    "static/js/2.f24d6f2c.chunk.js",
+    "static/js/runtime-main.168a4049.js",
+    "static/css/2.7c44a85c.chunk.css",
+    "static/js/2.cdf567e8.chunk.js",
     "static/css/main.89a7a8cf.chunk.css",
-    "static/js/main.218ff537.chunk.js"
+    "static/js/main.be6ba613.chunk.js"
   ]
 }
