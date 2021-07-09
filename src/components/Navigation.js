@@ -3,12 +3,13 @@ import React from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import About from "./About";
 import Config from "./Config";
+import Constants from "../utils/Constants";
 
 function Navigation() {
 	return (
 		<div>
 			<Navbar bg="light" expand="lg">
-				<Navbar.Brand>🏃‍♂️ Middleman</Navbar.Brand>
+				<Navbar.Brand href={Constants.APPLICATION_CONTEXT_PATH}>🏃‍♂️ Middleman</Navbar.Brand>
 				<Navbar.Toggle aria-controls="jsc-navbar" />
 				<Navbar.Collapse id="jsc-navbar">
 					<Nav className="mr-auto">
