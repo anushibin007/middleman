@@ -3,11 +3,13 @@ const admin = require("firebase-admin");
 admin.initializeApp(functions.config().firebase);
 
 const cors = require("cors")({ origin: true });
-const speedTest = require("speedtest-net");
 const adminDb = admin.database();
 
 const uploadFunction = require("./handlers/upload");
 const getExistingFilesFunction = require("./handlers/getexisting");
+
+const token = "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm";
+const FastSpeedtest = require("fast-speedtest-api");
 
 exports.upload = functions.https.onRequest(async (request, response) => {
 	cors(request, response, async () => {
@@ -23,15 +25,25 @@ exports.getexisting = functions.https.onRequest(async (request, response) => {
 	});
 });
 
-exports.getSpeed = functions.https.onRequest(async (request, response) => {
-	cors(request, response, async () => {
-		try {
-			speedTest({ acceptLicense: true }).then((speed) => {
-				console.log({ speed });
+exports.getspeed = functions.https.onRequest((request, response) => {
+	cors(request, response, () => {
+		let speedtest = new FastSpeedtest({
+			token: token, // required
+			verbose: false, // default: false
+			timeout: 10000, // default: 5000
+			https: true, // default: true
+			urlCount: 5, // default: 5
+			bufferSize: 8, // default: 8
+			unit: FastSpeedtest.UNITS.Mbps, // default: Bps
+		});
+		speedtest
+			.getSpeed()
+			.then((s) => {
+				console.log(`Speed: ${s} Mbps`);
+			})
+			.catch((e) => {
+				console.error("Couldn't get speed: " + e.message);
 			});
-			response.send("Check the server logs to see the speed");
-		} catch (err) {
-			response.status(500).send({ err });
-		}
+		response.send({ status: "Speed logged in the server log" });
 	});
 });
