@@ -101,7 +101,7 @@ const uploadFileToStorage = async (fileName) => {
 	return new Promise(async (resolve, reject) => {
 		try {
 			request(fileUrl)
-				.pipe(file.createWriteStream())
+				.pipe(file.createWriteStream({ resumable: false, public: true }))
 				.on("progress", (progress) => {
 					// Update the progress only if we have a valid file size.
 					// Else it will get directly updated to 100 in the end.
