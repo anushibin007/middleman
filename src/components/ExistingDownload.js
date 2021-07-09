@@ -42,6 +42,28 @@ const ExistingDownload = (props) => {
 		toast("🚀 Still under Development. Stay Tuned!");
 	};
 
+	const getDownloadProgress = () => {
+		if (existingDownload.progress === 0) {
+			return (
+				<React.Fragment>
+					🏗 Staging your file
+					<ProgressBar variant="warning" now={100} animated></ProgressBar>
+				</React.Fragment>
+			);
+		} else if (existingDownload.progress === 100) {
+			return <React.Fragment>✅ Complete</React.Fragment>;
+		} else if (existingDownload.progress === -1) {
+			return <React.Fragment>⚠ Errored</React.Fragment>;
+		} else {
+			return (
+				<React.Fragment>
+					▶ {existingDownload.progress}
+					<ProgressBar now={existingDownload.progress} animated></ProgressBar>
+				</React.Fragment>
+			);
+		}
+	};
+
 	const getFileSize = () => {
 		if (existingDownload.size) {
 			const size = Math.round((existingDownload.size / 1024 / 1024) * 100) / 100;
@@ -64,10 +86,7 @@ const ExistingDownload = (props) => {
 			</td>
 			<td>{getFileSize()}</td>
 			<td>{getDownloadLink()}</td>
-			<td>
-				{existingDownload.progress}
-				<ProgressBar now={existingDownload.progress} animated></ProgressBar>
-			</td>
+			<td>{getDownloadProgress()}</td>
 			<td>
 				{new Date(existingDownload.createdAt).toDateString()}
 				<br />
