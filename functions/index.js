@@ -10,7 +10,7 @@ const getExistingFilesFunction = require("./handlers/getexisting");
 
 exports.upload = functions.https.onRequest(async (request, response) => {
 	cors(request, response, async () => {
-		uploadFunction.handler(request, response, adminDb, admin);
+		uploadFunction.handler(request, response, admin);
 		return true;
 	});
 });
