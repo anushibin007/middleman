@@ -128,6 +128,7 @@ const uploadFileToStorage = async (fileName) => {
 				})
 				.on("finish", async () => {
 					await setFileProgress(100);
+					storeDownloadLinkToDb(file);
 					const successMessage = { success: "File '" + fileName + "' written to Storage" };
 					functions.logger.info(successMessage);
 					resolve(successMessage);
@@ -209,6 +210,13 @@ const setFileSizeOnDb = async (size) => {
 		size: size,
 	};
 	await setDBMetadata(dataToWriteToDb);
+};
+
+const storeDownloadLinkToDb = (file) => {
+	const dataToWriteToDb = {
+		publicUrl: file.publicUrl(),
+	};
+	setDBMetadata(dataToWriteToDb);
 };
 
 const hasAllAccessChecksPassed = () => {
