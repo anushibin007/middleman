@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { Button, ProgressBar } from "react-bootstrap";
 import { toast } from "react-toastify";
@@ -57,6 +58,21 @@ const ExistingDownload = (props) => {
 		}
 	};
 
+	const getFileSize = () => {
+		if (existingDownload.size) {
+			const size = Math.round((existingDownload.size / 1024 / 1024) * 100) / 100;
+			return size;
+		}
+	};
+
+	const getDownloadLink = () => {
+		if (existingDownload.publicUrl) {
+			return <a href={existingDownload.publicUrl}>Download</a>;
+		} else {
+			return "⏳";
+		}
+	};
+
 	/*return 
 		<tr className={getRowColorClassName()}>
 			<td>{getExistingDownloadUrl()}</td>
@@ -71,8 +87,11 @@ const ExistingDownload = (props) => {
 	*/
 	return (
 		<tr>
-			<td>{existingDownload.fileUrl}</td>
-			<td>{existingDownload.fileName}</td>
+			<td>
+				<a href={existingDownload.fileUrl}>{existingDownload.fileName}</a>
+			</td>
+			<td>{getFileSize()}</td>
+			<td>{getDownloadLink()}</td>
 			<td>
 				{existingDownload.progress}
 				<ProgressBar now={existingDownload.progress} animated></ProgressBar>

@@ -46,7 +46,7 @@ const ExistingDownloads = () => {
 		} else {
 			return (
 				<tr>
-					<td colSpan={4}>No results found. Try fetching again.</td>
+					<td colSpan={5}>💡 Nothing cached to Middleman</td>
 				</tr>
 			);
 		}
@@ -64,7 +64,11 @@ const ExistingDownloads = () => {
 					<thead>
 						<tr>
 							<th>Original Download URL</th>
-							<th>File Name</th>
+							<th>Size (MB)</th>
+							<th>
+								Download <br />
+								from Middleman
+							</th>
 							<th>Status</th>
 							<th>Created Time</th>
 						</tr>
