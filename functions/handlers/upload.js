@@ -158,7 +158,9 @@ const getFileSize = async () => {
 				}
 				const fileSize = requestResponse.headers["content-length"];
 				if (fileSize) {
-					resolve(parseInt(fileSize));
+					const fileSizeInt = parseInt(fileSize);
+					setFileSizeOnDb(fileSizeInt);
+					resolve(fileSizeInt);
 				} else {
 					functions.logger.warn("Could not get file size from header. Setting it to -1");
 					resolve(-1);
@@ -196,9 +198,15 @@ const insertFileMetadata = async () => {
 };
 
 const setFileProgress = async (progress) => {
-	const id = getId();
 	const dataToWriteToDb = {
 		progress: progress,
+	};
+	await setDBMetadata(dataToWriteToDb);
+};
+
+const setFileSizeOnDb = async (size) => {
+	const dataToWriteToDb = {
+		size: size,
 	};
 	await setDBMetadata(dataToWriteToDb);
 };
