@@ -2,6 +2,7 @@ const constants = require("../utils/constants");
 const functions = require("firebase-functions");
 const path = require("path");
 const request = require("request");
+const utilities = require("../utils/utilities");
 
 // Constants
 const DB_NAME = "files";
@@ -244,16 +245,9 @@ const hasAllAccessChecksPassed = () => {
  * Generate the ID from the hash of the file URL
  */
 const getId = () => {
-	return getHash(fileUrl);
+	return utilities.getHash(fileUrl);
 };
 
 const getFileName = () => {
 	return path.basename(fileUrl);
-};
-
-/**
- * For now, the hash function gives a Base 64 encoding of the input
- */
-const getHash = (input) => {
-	return encodeURIComponent(Buffer.from(input).toString("base64"));
 };
