@@ -6,6 +6,7 @@ const cors = require("cors")({ origin: true });
 const adminDb = admin.database();
 
 const uploadFunction = require("./handlers/upload");
+const deletedoc = require("./handlers/delete");
 const getExistingFilesFunction = require("./handlers/getexisting");
 
 const token = "YXNkZmFzZGxmbnNkYWZoYXNkZmhrYWxm";
@@ -14,6 +15,13 @@ const FastSpeedtest = require("fast-speedtest-api");
 exports.upload = functions.https.onRequest(async (request, response) => {
 	cors(request, response, async () => {
 		uploadFunction.handler(request, response, admin);
+		return true;
+	});
+});
+
+exports.delete = functions.https.onRequest(async (request, response) => {
+	cors(request, response, async () => {
+		deletedoc.handler(request, response, admin);
 		return true;
 	});
 });
