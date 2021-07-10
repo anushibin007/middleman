@@ -22,6 +22,10 @@ exports.handler = async (aRequest, aResponse, anAdmin) => {
 	httpRequest = aRequest;
 	httpResponse = aResponse;
 	fileUrl = httpRequest.query.fileUrl;
+	// If the fileUrl is URL-encoded, decode it before working with it
+	if (httpRequest.query.encoded) {
+		fileUrl = decodeURIComponent(fileUrl);
+	}
 	admin = anAdmin;
 	db = admin.database();
 

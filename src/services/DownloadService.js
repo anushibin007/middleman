@@ -4,7 +4,9 @@ import Constants from "../utils/Constants";
 
 class DownloadService {
 	uploadFile(fileUrl) {
-		return axios.get(Constants.SERVER_URL + "/upload?fileUrl=" + fileUrl);
+		// URL-Encode the fileUrl before sending it over HTTP(S)
+		fileUrl = encodeURIComponent(fileUrl);
+		return axios.get(Constants.SERVER_URL + "/upload?fileUrl=" + fileUrl + "&encoded=true");
 	}
 
 	getExistingDownloads() {
