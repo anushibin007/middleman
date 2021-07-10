@@ -13,8 +13,8 @@ class DownloadService {
 		return axios.get(Constants.SERVER_URL + "/getexisting");
 	}
 
-	async deleteFile(fileId) {
-		return axios.get(Constants.SERVER_URL + "/delete?id=" + fileId).then(() => {
+	async deleteFile(key) {
+		return axios.get(Constants.SERVER_URL + "/delete?key=" + key).then(() => {
 			toast.warning("🧯 File deleted from middleman cache");
 		});
 	}

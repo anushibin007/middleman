@@ -16,7 +16,7 @@ const ExistingDownload = (props) => {
 	};
 
 	const deleteFileFromMiddleman = () => {
-		DownloadService.deleteFile(existingDownload.id);
+		DownloadService.deleteFile(existingDownload.key);
 	};
 
 	const retryDownload = () => {
@@ -76,6 +76,22 @@ const ExistingDownload = (props) => {
 		}
 	};
 
+	const getDeleteLink = () => {
+		if (isDownloadComplete() && existingDownload.publicUrl) {
+			return (
+				<Button onClick={deleteFileFromMiddleman} variant="danger">
+					Delete
+				</Button>
+			);
+		} else {
+			return (
+				<Button onClick={deleteFileFromMiddleman} variant="danger">
+					Cancel
+				</Button>
+			);
+		}
+	};
+
 	const isDownloadComplete = () => {
 		return existingDownload.progress === 100;
 	};
@@ -86,12 +102,16 @@ const ExistingDownload = (props) => {
 				<a href={existingDownload.fileUrl}>{existingDownload.fileName}</a>
 			</td>
 			<td>{getFileSize()}</td>
-			<td>{getDownloadLink()}</td>
 			<td>{getDownloadProgress()}</td>
 			<td>
 				{new Date(existingDownload.createdAt).toDateString()}
 				<br />
 				{new Date(existingDownload.createdAt).toLocaleTimeString()}
+			</td>
+			<td>
+				{getDownloadLink()}
+				<br />
+				{getDeleteLink()}
 			</td>
 		</tr>
 	);

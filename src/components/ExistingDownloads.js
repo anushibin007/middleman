@@ -65,12 +65,9 @@ const ExistingDownloads = () => {
 						<tr>
 							<th>🔗 Original Download URL</th>
 							<th>📏 Size (MB)</th>
-							<th>
-								🚀 Download <br />
-								from Middleman
-							</th>
 							<th>⛽ Status</th>
 							<th>🕐 Created Time</th>
+							<th>🤺 Actions</th>
 						</tr>
 					</thead>
 					<tbody>{validateExistingDownloads()}</tbody>
