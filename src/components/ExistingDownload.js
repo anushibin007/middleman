@@ -11,31 +11,12 @@ const ExistingDownload = (props) => {
 		setExistingDownload(props.item);
 	}, [props.item]);
 
-	const getRowColorClassName = () => {
-		if (existingDownload.status === "done") return "table-success";
-		if (existingDownload.status === "in progress") return "table-warning";
-		if (existingDownload.status === "error") return "table-danger";
-	};
-
-	const getButtonsDisabledStatus = () => {
-		if (existingDownload.status === "done" || existingDownload.status === "error") return false;
-		return true;
-	};
-
 	const downloadFileFromMiddleman = () => {
-		window.open(existingDownload.middlemanUrl);
+		window.open(existingDownload.publicUrl);
 	};
 
 	const deleteFileFromMiddleman = () => {
 		DownloadService.deleteFile(existingDownload.id);
-	};
-
-	const getExistingDownloadUrl = () => {
-		if (existingDownload.status === "error") {
-			return existingDownload.downloadUrl;
-		} else {
-			return <a href={existingDownload.downloadUrl}>{existingDownload.downloadUrl}</a>;
-		}
 	};
 
 	const retryDownload = () => {
@@ -73,7 +54,7 @@ const ExistingDownload = (props) => {
 
 	const getDownloadLink = () => {
 		if (isDownloadComplete() && existingDownload.publicUrl) {
-			return <a href={existingDownload.publicUrl}>Download</a>;
+			return <Button onClick={downloadFileFromMiddleman}>Download</Button>;
 		} else {
 			return "⏳";
 		}
