@@ -241,5 +241,5 @@ const getFileName = () => {
  * For now, the hash function gives a Base 64 encoding of the input
  */
 const getHash = (input) => {
-	return Buffer.from(input).toString("base64");
+	return encodeURIComponent(Buffer.from(input).toString("base64"));
 };
