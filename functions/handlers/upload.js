@@ -181,7 +181,7 @@ const setDBMetadata = (dataToWriteToDb) => {
 	return new Promise((resolve, reject) => {
 		id = getId();
 		db.ref(DB_NAME + "/" + id)
-			.update(dataToWriteToDb)
+			.update({ ...dataToWriteToDb, key: id })
 			.then(() => {
 				functions.logger.info(dataToWriteToDb);
 				resolve(dataToWriteToDb);
@@ -196,7 +196,6 @@ const setDBMetadata = (dataToWriteToDb) => {
 
 const insertFileMetadata = async () => {
 	const dataToWriteToDb = {
-		key: getId(),
 		fileName: getFileName(),
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
