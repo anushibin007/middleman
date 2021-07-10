@@ -196,6 +196,7 @@ const setDBMetadata = (dataToWriteToDb) => {
 
 const insertFileMetadata = async () => {
 	const dataToWriteToDb = {
+		key: getId(),
 		fileName: getFileName(),
 		fileUrl: fileUrl,
 		createdAt: new Date().getTime(),
