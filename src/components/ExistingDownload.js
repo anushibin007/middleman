@@ -50,7 +50,7 @@ const ExistingDownload = (props) => {
 					<ProgressBar variant="warning" now={100} animated></ProgressBar>
 				</React.Fragment>
 			);
-		} else if (existingDownload.progress === 100) {
+		} else if (isDownloadComplete()) {
 			return <React.Fragment>✅ Complete</React.Fragment>;
 		} else if (existingDownload.progress === -1) {
 			return <React.Fragment>⚠ Errored</React.Fragment>;
@@ -72,11 +72,15 @@ const ExistingDownload = (props) => {
 	};
 
 	const getDownloadLink = () => {
-		if (existingDownload.progress === 100 && existingDownload.publicUrl) {
+		if (isDownloadComplete() && existingDownload.publicUrl) {
 			return <a href={existingDownload.publicUrl}>Download</a>;
 		} else {
 			return "⏳";
 		}
+	};
+
+	const isDownloadComplete = () => {
+		return existingDownload.progress === 100;
 	};
 
 	return (
