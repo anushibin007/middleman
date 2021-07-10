@@ -72,7 +72,7 @@ const ExistingDownload = (props) => {
 	};
 
 	const getDownloadLink = () => {
-		if (existingDownload.publicUrl) {
+		if (existingDownload.progress === 100 && existingDownload.publicUrl) {
 			return <a href={existingDownload.publicUrl}>Download</a>;
 		} else {
 			return "⏳";
