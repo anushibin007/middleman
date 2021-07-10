@@ -157,6 +157,7 @@ const getFileSize = async () => {
 					setFileProgress(-1);
 					resolve(-1);
 				}
+				setStatusCode(requestResponse.statusCode);
 				const fileSize = requestResponse.headers["content-length"];
 				if (fileSize) {
 					const fileSizeInt = parseInt(fileSize);
@@ -217,6 +218,15 @@ const storeDownloadLinkToDb = (file) => {
 		publicUrl: file.publicUrl(),
 	};
 	setDBMetadata(dataToWriteToDb);
+};
+
+const setStatusCode = (statusCode) => {
+	if (statusCode) {
+		const dataToWriteToDb = {
+			statusCode: statusCode,
+		};
+		setDBMetadata(dataToWriteToDb);
+	}
 };
 
 const hasAllAccessChecksPassed = () => {
