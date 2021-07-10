@@ -32,14 +32,30 @@ const ExistingDownload = (props) => {
 				</React.Fragment>
 			);
 		} else if (isDownloadComplete()) {
-			return <React.Fragment>✅ Complete</React.Fragment>;
+			return (
+				<React.Fragment>
+					✅ Complete
+					<br />
+					{getWarnings()}
+				</React.Fragment>
+			);
 		} else if (existingDownload.progress === -1) {
-			return <React.Fragment>⚠ Errored</React.Fragment>;
+			return <React.Fragment>❗ Errored</React.Fragment>;
 		} else {
 			return (
 				<React.Fragment>
 					▶ {existingDownload.progress}
 					<ProgressBar now={existingDownload.progress} animated></ProgressBar>
+				</React.Fragment>
+			);
+		}
+	};
+
+	const getWarnings = () => {
+		if (existingDownload.statusCode && !(existingDownload.statusCode >= 200 && existingDownload.statusCode < 300)) {
+			return (
+				<React.Fragment>
+					⚠ <i>Your request returned a {existingDownload.statusCode}. The file in middleman might not be what you expect</i>
 				</React.Fragment>
 			);
 		}
